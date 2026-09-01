@@ -1,0 +1,351 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit&family=PT+Mono&display=swap');
+@import 'tailwindcss';
+
+@theme {
+  --font-mono: 'PT Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --color-accent: #c770f0;
+}
+
+html {
+  --section-background-color: linear-gradient(
+    to bottom left,
+    rgba(17, 16, 16, 0.582),
+    rgba(12, 8, 24, 0.904)
+  );
+  --image-gradient: linear-gradient(
+    to bottom left,
+    rgba(17, 16, 16, 0.678),
+    rgba(12, 10, 22, 0.863)
+  );
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-mono);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-image: linear-gradient(to left, rgb(27 20 41), rgb(20 15 35));
+  overflow-x: hidden;
+}
+
+.purple {
+  color: var(--color-accent);
+}
+
+button:focus {
+  box-shadow: none !important;
+  outline: none;
+}
+
+/* --------- */
+/* Scrollbar */
+/* --------- */
+::-webkit-scrollbar {
+  width: 7px;
+}
+::-webkit-scrollbar-track {
+  background: #2d1950;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(178, 121, 216, 0.959);
+  border-radius: 12px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(222, 130, 235, 0.911);
+  border-radius: 12px;
+}
+
+/* --------- */
+/* Preloader */
+/* --------- */
+#preloader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 999999;
+  background-color: #0c0513;
+  background-image: url('./assets/pre.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+}
+#preloader-none {
+  display: none;
+}
+#no-scroll {
+  overflow: hidden;
+  height: 100vh;
+}
+
+/* --------- */
+/* Particles  */
+/* --------- */
+#tsparticles {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* --------- */
+/* Particles float animation */
+/* --------- */
+@keyframes float-up {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.6;
+  }
+  90% {
+    opacity: 0.2;
+  }
+  100% {
+    transform: translateY(-100vh);
+    opacity: 0;
+  }
+}
+
+/* --------- */
+/* Wave + blinking cursor */
+/* --------- */
+.wave {
+  animation-name: wave-animation;
+  animation-duration: 2.1s;
+  animation-iteration-count: infinite;
+  transform-origin: 70% 70%;
+  display: inline-block;
+}
+
+@keyframes wave-animation {
+  0% {
+    transform: rotate(0deg);
+  }
+  10% {
+    transform: rotate(14deg);
+  }
+  20% {
+    transform: rotate(-8deg);
+  }
+  30% {
+    transform: rotate(14deg);
+  }
+  40% {
+    transform: rotate(-4deg);
+  }
+  50% {
+    transform: rotate(10deg);
+  }
+  60% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+.blink {
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* --------- */
+/* Navbar  */
+/* --------- */
+.nav-link {
+  position: relative;
+  color: #fff;
+  padding: 0.8rem 1rem;
+  font-weight: 400;
+  transition: all 0.3s ease-out 0s;
+  z-index: 1;
+}
+.nav-link::after {
+  content: '';
+  position: absolute;
+  display: block;
+  height: 5px;
+  width: 0;
+  border-radius: 16px;
+  background: #c95bf5;
+  bottom: 1px;
+  left: 0;
+  z-index: -1;
+  transition: all 0.3s ease-out 0s;
+}
+.nav-link:hover::after {
+  width: 100%;
+}
+
+@media (max-width: 767px) {
+  .nav-link {
+    padding: 0.7rem 1rem;
+  }
+}
+
+/* --------- */
+/* Social icons */
+/* --------- */
+.social-icon {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  font-size: 1.2em;
+  background: rgba(255, 255, 255, 0.972);
+  border-radius: 50%;
+  color: #700c86;
+  transition: 0.5s;
+}
+.social-icon::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: #68187a;
+  transition: 0.5s;
+  transform: scale(0.9);
+  z-index: -1;
+}
+.social-icon:hover::before {
+  transform: scale(1.1);
+  box-shadow: 0 0 15px #801f95;
+}
+.social-icon:hover {
+  color: #87209e;
+  box-shadow: 0 0 5px #87209e;
+  text-shadow: 0 0 2px #87209e;
+}
+.social-icon--white {
+  color: #fff;
+  background: transparent;
+}
+
+/* --------- */
+/* Tech / tool icons */
+/* --------- */
+.tech-icon {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 15px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  opacity: 0.93;
+  outline: 1.7px solid rgba(200, 137, 230, 0.637);
+  border-radius: 24px;
+  box-shadow: 4px 5px 4px 3px rgba(89, 4, 168, 0.137);
+  color: #fff;
+  width: fit-content;
+  cursor: pointer;
+  transition:
+    outline-color 0.3s,
+    outline-width 0.3s,
+    transform 0.3s;
+}
+.tech-icon:hover {
+  transform: scale(1.05);
+  outline: 2.2px solid rgba(197, 115, 230, 0.883);
+}
+.tech-icon img {
+  height: 1.6rem;
+  line-height: 1.6;
+}
+
+@media (max-width: 767px) {
+  .tech-icon {
+    margin: 6px;
+    padding: 8px 14px;
+    font-size: 0.85rem;
+    gap: 8px;
+  }
+  .tech-icon img {
+    height: 1.3rem;
+  }
+}
+
+/* --------- */
+/* Cards */
+/* --------- */
+.card-hover {
+  transition: all 0.5s ease 0s;
+}
+.card-hover:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 4px 5px rgba(129, 72, 144, 0.561);
+}
+
+/* --------- */
+/* Buttons */
+/* --------- */
+.btn-primary {
+  color: #fff;
+  background-color: #623686;
+  border-color: #623686;
+  padding: 0.5rem 1.2rem;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+}
+.btn-primary:hover {
+  background-color: #6d20c5d7;
+  border-color: #6d20c5d7;
+  color: #fff;
+}
+
+.btn-ghost {
+  line-height: 1.4em;
+  background-color: #934cce5e;
+  padding: 0.25rem 1.1rem;
+  border-radius: 5px;
+  vertical-align: middle;
+  text-align: center;
+  transition: 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #fff;
+}
+.btn-ghost:hover {
+  transform: translateY(-2px);
+  background-color: #a24dd386;
+}
+
+/* --------- */
+/* Resume timeline */
+/* --------- */
+.resume-item {
+  padding: 0 0 10px 25px;
+  margin-top: -2px;
+  border-left: 2px solid #8a49a8;
+  position: relative;
+}
+.resume-item:last-child {
+  padding-bottom: 0;
+}
+.resume-item::before {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  left: -9px;
+  top: 0;
+  background: #fff;
+  border: 2px solid #8a49a8;
+}
