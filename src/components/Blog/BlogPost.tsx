@@ -9,7 +9,7 @@ import { useI18n } from '../../i18n'
 export default function BlogPost() {
   const params = useParams()
   const { dict, locale } = useI18n()
-  const post = createMemo(() => getPost(params.slug ?? ''))
+  const post = createMemo(() => getPost(params.slug ?? '', locale()))
 
   return (
     <div class="relative z-0 pt-28 pb-8 md:pt-36">

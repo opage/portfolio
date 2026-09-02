@@ -1,3 +1,5 @@
+import type { Locale } from '../i18n/types'
+
 export interface BlogPost {
   slug: string
   title: string
@@ -76,7 +78,7 @@ function parseFrontmatter(raw: string): { data: Record<string, unknown>; content
   return { data, content: raw.slice(match[0].length) }
 }
 
-const modules = import.meta.glob('../content/blog/*.md', {
+const modules = import.meta.glob('../content/blog/*/*.md', {
   query: '?raw',
   import: 'default',
   eager: true,
@@ -93,23 +95,45 @@ function toTags(value: unknown): string[] {
   return []
 }
 
-export const posts: BlogPost[] = Object.entries(modules)
-  .map(([path, raw]) => {
-    const { data, content } = parseFrontmatter(raw)
-    const slug = path.split('/').pop()?.replace(/\.md$/, '') ?? path
-    return {
-      slug,
-      title: typeof data.title === 'string' ? data.title : slug,
-      date: typeof data.date === 'string' ? data.date : '',
-      description: typeof data.description === 'string' ? data.description : '',
-      tags: toTags(data.tags),
-      content: content.trim(),
-    }
-  })
-  .sort((a, b) => b.date.localeCompare(a.date))
+function toPost(slug: string, raw: string): BlogPost {
+  const { data, content } = parseFrontmatter(raw)
+  return {
+    slug,
+    title: typeof data.title === 'string' ? data.title : slug,
+    date: typeof data.date === 'string' ? data.date : '',
+    description: typeof data.description === 'string' ? data.description : '',
+    tags: toTags(data.tags),
+    content: content.trim(),
+  }
+}
 
-export function getPost(slug: string): BlogPost | undefined {
-  return posts.find((post) => post.slug === slug)
+type Localized = Partial<Record<Locale, BlogPost>>
+
+const bySlug: Record<string, Localized> = {}
+
+for (const [path, raw] of Object.entries(modules)) {
+  const match = /\/(en|fr|lb)\/([^/]+)\.md$/.exec(path)
+  if (!match) continue
+  const locale = match[1] as Locale
+  const slug = match[2]
+  const entry = (bySlug[slug] ??= {})
+  entry[locale] = toPost(slug, raw)
+}
+
+function pickLocalized(localized: Localized, locale: Locale): BlogPost | undefined {
+  return localized[locale] ?? localized.en ?? localized.fr ?? localized.lb
+}
+
+export function getPosts(locale: Locale): BlogPost[] {
+  return Object.entries(bySlug)
+    .map(([, localized]) => pickLocalized(localized, locale))
+    .filter((post): post is BlogPost => post !== undefined)
+    .sort((a, b) => b.date.localeCompare(a.date))
+}
+
+export function getPost(slug: string, locale: Locale): BlogPost | undefined {
+  const localized = bySlug[slug]
+  return localized ? pickLocalized(localized, locale) : undefined
 }
 
 export function formatDate(date: string, locale: string): string {
