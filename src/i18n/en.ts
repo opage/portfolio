@@ -10,6 +10,7 @@ export const en: Dictionary = {
     experience: 'Experience',
     projects: 'Projects',
     resume: 'Resume',
+    blog: 'Blog',
     toggle: 'Toggle navigation',
     language: 'Language',
   },
@@ -281,6 +282,14 @@ export const en: Dictionary = {
   },
   resume: {
     download: 'Download CV',
+  },
+  blog: {
+    heading: 'Technical **Blog**',
+    subtitle: 'Notes and deep dives on software engineering.',
+    readMore: 'Read more',
+    back: 'Back to articles',
+    minutes: 'min read',
+    notFound: 'Article not found.',
   },
   footer: {
     designed: 'Designed and Developed by Olivier Page',

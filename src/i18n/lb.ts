@@ -10,6 +10,7 @@ export const lb: Dictionary = {
     experience: 'Erfarung',
     projects: 'Projeten',
     resume: 'Liewenslaf',
+    blog: 'Blog',
     toggle: 'Navigatioun opmaachen',
     language: 'Sprooch',
   },
@@ -281,6 +282,14 @@ export const lb: Dictionary = {
   },
   resume: {
     download: 'Liewenslaf eroflueden',
+  },
+  blog: {
+    heading: 'Techneschen **Blog**',
+    subtitle: 'Notizen an déif Ablécker iwwer Software-Engineering.',
+    readMore: 'Weiderliesen',
+    back: 'Zréck op d\'Artikelen',
+    minutes: 'Min. Lieszäit',
+    notFound: 'Artikel net fonnt.',
   },
   footer: {
     designed: 'Designt an entwéckelt vum Olivier Page',

@@ -10,6 +10,7 @@ export const fr: Dictionary = {
     experience: 'Expérience',
     projects: 'Projets',
     resume: 'CV',
+    blog: 'Blog',
     toggle: 'Ouvrir la navigation',
     language: 'Langue',
   },
@@ -281,6 +282,14 @@ export const fr: Dictionary = {
   },
   resume: {
     download: 'Télécharger le CV',
+  },
+  blog: {
+    heading: '**Blog** technique',
+    subtitle: "Notes et articles de fond sur l'ingénierie logicielle.",
+    readMore: 'Lire la suite',
+    back: 'Retour aux articles',
+    minutes: 'min de lecture',
+    notFound: 'Article introuvable.',
   },
   footer: {
     designed: 'Conçu et développé par Olivier Page',
