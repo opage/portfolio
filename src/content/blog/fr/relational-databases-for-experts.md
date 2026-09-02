@@ -94,6 +94,132 @@ CREATE TABLE "order" (
 `CASCADE` supprime l'enfant quand le parent disparaît ; `SET NULL` efface la
 colonne ; `RESTRICT` bloque le changement.
 
+## Commandes SQL : DDL, DQL, DML, DCL, TCL
+
+SQL se divise en cinq familles de commandes.
+
+### DDL — Langage de définition des données
+
+Définit et modifie le schéma.
+
+```sql
+CREATE TABLE product (
+  id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  price NUMERIC(10, 2) NOT NULL
+);
+
+ALTER TABLE product ADD COLUMN active BOOLEAN DEFAULT true;
+
+DROP TABLE product;
+```
+
+### DQL — Langage de requête des données
+
+Lit les données. C'est simplement `SELECT`.
+
+```sql
+SELECT id, name, price
+FROM product
+WHERE active
+ORDER BY price DESC;
+```
+
+### DML — Langage de manipulation des données
+
+Modifie les données : `INSERT`, `UPDATE`, `DELETE`.
+
+```sql
+INSERT INTO product (name, price) VALUES ('Keyboard', 89.90);
+
+UPDATE product SET price = 79.90 WHERE name = 'Keyboard';
+
+DELETE FROM product WHERE id = 1;
+```
+
+`UPDATE` et `DELETE` doivent porter une clause `WHERE` — sans elle, ils
+touchent chaque ligne.
+
+### DCL — Langage de contrôle des données
+
+Gère les permissions avec `GRANT` et `REVOKE`.
+
+```sql
+GRANT SELECT, INSERT, UPDATE ON product TO app_user;
+REVOKE DELETE ON product FROM app_user;
+```
+
+### TCL — Langage de contrôle des transactions
+
+Contrôle les transactions avec `COMMIT`, `ROLLBACK` et `SAVEPOINT`.
+
+```sql
+BEGIN;
+
+UPDATE accounts SET balance = balance - 100 WHERE id = 1;
+SAVEPOINT before_credit;
+UPDATE accounts SET balance = balance + 100 WHERE id = 2;
+
+ROLLBACK TO before_credit;
+COMMIT;
+```
+
+## Jointures
+
+Les jointures combinent des lignes de deux tables ou plus via une condition de
+jointure.
+
+```sql
+-- INNER JOIN: only matching rows
+SELECT c.name, o.id AS order_id, o.total
+FROM customer c
+JOIN "order" o ON o.customer_id = c.id;
+
+-- LEFT JOIN: all customers, even without orders (NULL on the right)
+SELECT c.name, o.id AS order_id
+FROM customer c
+LEFT JOIN "order" o ON o.customer_id = c.id;
+
+-- RIGHT JOIN: all orders, even without a customer (NULL on the left)
+SELECT c.name, o.id AS order_id
+FROM customer c
+RIGHT JOIN "order" o ON o.customer_id = c.id;
+
+-- FULL OUTER JOIN: both sides, NULL where missing
+SELECT c.name, o.id AS order_id
+FROM customer c
+FULL OUTER JOIN "order" o ON o.customer_id = c.id;
+```
+
+```sql
+-- CROSS JOIN: every combination of rows
+SELECT c.name, p.name
+FROM customer c
+CROSS JOIN product p;
+```
+
+```sql
+-- self join: employees and their managers
+SELECT e.name AS employee, m.name AS manager
+FROM employee e
+LEFT JOIN employee m ON m.id = e.manager_id;
+```
+
+Les jointures se combinent naturellement avec l'agrégation :
+
+```sql
+-- order totals from line items
+SELECT o.id, SUM(ol.quantity * p.price) AS total
+FROM "order" o
+JOIN order_line ol ON ol.order_id = o.id
+JOIN product p ON p.id = ol.product_id
+GROUP BY o.id;
+```
+
+Utilisez des alias de table (`c`, `o`) pour la lisibilité, et gardez la
+condition de jointure dans `ON` plutôt que `WHERE` pour que l'intention reste
+claire.
+
 ## Index
 
 Un index accélère les recherches au prix de performances d'écriture et de
@@ -205,6 +331,32 @@ SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
 - **Read committed** — chaque instruction voit un instantané stable.
 - **Repeatable read** — toute la transaction voit un seul instantané.
 - **Serializable** — les transactions se comportent comme si elles s'exécutaient une à une.
+
+## Bonnes pratiques
+
+- **Utilisez des procédures stockées pour le CRUD** — centralisez la logique de
+  données en un seul endroit et accordez l'accès à la procédure plutôt qu'à la
+  table.
+- **Utilisez des requêtes paramétrées** — ne concaténez jamais l'entrée
+  utilisateur dans le SQL ; liez les valeurs en paramètres pour prévenir
+  l'injection SQL.
+- **Gérez les permissions** — laissez les utilisateurs exécuter les procédures
+  CRUD sans accès direct aux tables.
+
+```sql
+-- parameterized query: the value is bound as data, not SQL
+SELECT id, name FROM customer WHERE email = $1;
+```
+
+```sql
+-- grant execution through a procedure, not the table
+GRANT EXECUTE ON PROCEDURE create_customer TO app_user;
+REVOKE ALL ON customer FROM app_user;
+```
+
+Les instructions paramétrées séparent le SQL des valeurs, de sorte que l'entrée
+est traitée comme des données. Combinées aux permissions au niveau des
+procédures, la surface reste petite et auditable.
 
 ## Pour conclure
 
