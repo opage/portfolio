@@ -439,7 +439,7 @@ button:focus {
 .markdown-body pre code {
   background: transparent;
   padding: 0;
-  color: inherit;
+  color: #d6d0e8;
   font-size: 0.875rem;
 }
 .markdown-body table {
