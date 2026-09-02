@@ -2,6 +2,7 @@ import { createSignal, onMount, onCleanup, lazy, Suspense } from 'solid-js'
 import { HashRouter, Route, Navigate } from '@solidjs/router'
 import type { RouteSectionProps } from '@solidjs/router'
 import { I18nProvider, useI18n } from './i18n'
+import { ThemeProvider } from './theme'
 import Preloader from './components/Preloader'
 import Navbar from './components/Navbar'
 import ScrollToTop from './components/ScrollToTop'
@@ -22,7 +23,7 @@ function RedirectHome() {
 function LoadingFallback() {
   const { dict } = useI18n()
   return (
-    <div class="flex min-h-screen items-center justify-center text-white">
+    <div class="flex min-h-screen items-center justify-center text-ink">
       {dict().loading}
     </div>
   )
@@ -52,16 +53,18 @@ function Layout(props: RouteSectionProps) {
 export default function App() {
   return (
     <I18nProvider>
-      <HashRouter root={Layout}>
-        <Route path="/" component={Home} />
-        <Route path="/about" component={About} />
-        <Route path="/experience" component={Experience} />
-        <Route path="/projects" component={Projects} />
-        <Route path="/resume" component={Resume} />
-        <Route path="/blog" component={Blog} />
-        <Route path="/blog/:slug" component={BlogPost} />
-        <Route path="*" component={RedirectHome} />
-      </HashRouter>
+      <ThemeProvider>
+        <HashRouter root={Layout}>
+          <Route path="/" component={Home} />
+          <Route path="/about" component={About} />
+          <Route path="/experience" component={Experience} />
+          <Route path="/projects" component={Projects} />
+          <Route path="/resume" component={Resume} />
+          <Route path="/blog" component={Blog} />
+          <Route path="/blog/:slug" component={BlogPost} />
+          <Route path="*" component={RedirectHome} />
+        </HashRouter>
+      </ThemeProvider>
     </I18nProvider>
   )
 }

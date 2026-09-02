@@ -4,9 +4,18 @@
 @theme {
   --font-mono: 'PT Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
   --color-accent: #c770f0;
+  --color-ink: #ffffff;
+  --color-surface: rgba(255, 255, 255, 0.05);
+  --color-surface-solid: #181a27;
+  --color-nav: rgba(27, 26, 46, 0.66);
+  --color-accent-soft: rgba(147, 76, 206, 0.37);
 }
 
-html {
+:root {
+  --bg-page: linear-gradient(to left, rgb(27 20 41), rgb(20 15 35));
+  --ink-muted: rgba(255, 255, 255, 0.6);
+  --icon-bg: #ffffff;
+  --icon-fg: #700c86;
   --section-background-color: linear-gradient(
     to bottom left,
     rgba(17, 16, 16, 0.582),
@@ -19,13 +28,27 @@ html {
   );
 }
 
+[data-theme='light'] {
+  --color-accent: #a24bd1;
+  --color-ink: #211d33;
+  --color-surface: rgba(255, 255, 255, 0.6);
+  --color-surface-solid: #ffffff;
+  --color-nav: rgba(255, 255, 255, 0.82);
+  --color-accent-soft: rgba(147, 76, 206, 0.14);
+  --bg-page: linear-gradient(to left, #f5f1fb, #ece4f6);
+  --ink-muted: rgba(33, 29, 51, 0.6);
+  --icon-bg: #934cce;
+  --icon-fg: #ffffff;
+}
+
 body {
   margin: 0;
   font-family: var(--font-mono);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-image: linear-gradient(to left, rgb(27 20 41), rgb(20 15 35));
+  background-image: var(--bg-page);
   overflow-x: hidden;
+  transition: background-image 0.3s ease;
 }
 
 .purple {
@@ -162,7 +185,7 @@ button:focus {
 /* --------- */
 .nav-link {
   position: relative;
-  color: #fff;
+  color: var(--color-ink);
   padding: 0.6rem 0.85rem;
   font-weight: 400;
   transition: all 0.3s ease-out 0s;
@@ -175,7 +198,7 @@ button:focus {
   height: 5px;
   width: 0;
   border-radius: 16px;
-  background: #c95bf5;
+  background: var(--color-accent);
   bottom: 1px;
   left: 0;
   z-index: -1;
@@ -202,9 +225,9 @@ button:focus {
   width: 40px;
   height: 40px;
   font-size: 1.2em;
-  background: rgba(255, 255, 255, 0.972);
+  background: var(--icon-bg);
   border-radius: 50%;
-  color: #700c86;
+  color: var(--icon-fg);
   transition: 0.5s;
 }
 .social-icon::before {
@@ -230,7 +253,7 @@ button:focus {
   text-shadow: 0 0 2px #87209e;
 }
 .social-icon--white {
-  color: #fff;
+  color: var(--color-ink);
   background: transparent;
 }
 
@@ -248,7 +271,7 @@ button:focus {
   outline: 1.7px solid rgba(200, 137, 230, 0.637);
   border-radius: 24px;
   box-shadow: 4px 5px 4px 3px rgba(89, 4, 168, 0.137);
-  color: #fff;
+  color: var(--color-ink);
   width: fit-content;
   cursor: pointer;
   transition:
@@ -310,7 +333,7 @@ button:focus {
 
 .btn-ghost {
   line-height: 1.4em;
-  background-color: #934cce5e;
+  background-color: var(--color-accent-soft);
   padding: 0.25rem 1.1rem;
   border-radius: 5px;
   vertical-align: middle;
@@ -319,7 +342,7 @@ button:focus {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  color: #fff;
+  color: var(--color-ink);
 }
 .btn-ghost:hover {
   transform: translateY(-2px);
@@ -330,7 +353,7 @@ button:focus {
 /* Blog / markdown article */
 /* --------- */
 .markdown-body {
-  color: rgba(255, 255, 255, 0.92);
+  color: var(--color-ink);
   line-height: 1.75;
   font-size: 1rem;
   overflow-wrap: break-word;
@@ -344,7 +367,7 @@ button:focus {
 .markdown-body h4,
 .markdown-body h5,
 .markdown-body h6 {
-  color: #fff;
+  color: var(--color-ink);
   font-weight: 600;
   line-height: 1.3;
   margin: 1.75em 0 0.75em;
@@ -379,28 +402,28 @@ button:focus {
   margin: 0.35em 0;
 }
 .markdown-body a {
-  color: #c770f0;
+  color: var(--color-accent);
   text-decoration: none;
   border-bottom: 1px solid transparent;
   transition: border-color 0.2s;
 }
 .markdown-body a:hover {
-  border-bottom-color: #c770f0;
+  border-bottom-color: var(--color-accent);
 }
 .markdown-body blockquote {
   margin: 1.2em 0;
   padding: 0.4em 1em;
-  border-left: 4px solid #c770f0;
-  background: rgba(147, 76, 206, 0.1);
-  color: rgba(255, 255, 255, 0.75);
+  border-left: 4px solid var(--color-accent);
+  background: var(--color-accent-soft);
+  color: var(--ink-muted);
 }
 .markdown-body blockquote p {
   margin: 0.4em 0;
 }
 .markdown-body code {
   font-family: var(--font-mono);
-  background: rgba(147, 76, 206, 0.18);
-  color: #e8d4ff;
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
   padding: 0.15em 0.4em;
   border-radius: 5px;
   font-size: 0.9em;
@@ -432,8 +455,8 @@ button:focus {
   text-align: left;
 }
 .markdown-body th {
-  background: rgba(147, 76, 206, 0.2);
-  color: #fff;
+  background: var(--color-accent-soft);
+  color: var(--color-ink);
 }
 .markdown-body img {
   max-width: 100%;
@@ -462,7 +485,7 @@ button:focus {
 .resume-item {
   padding: 0 0 10px 25px;
   margin-top: -2px;
-  border-left: 2px solid #8a49a8;
+  border-left: 2px solid var(--color-accent);
   position: relative;
 }
 .resume-item:last-child {
@@ -476,6 +499,6 @@ button:focus {
   border-radius: 50%;
   left: -9px;
   top: 0;
-  background: #fff;
-  border: 2px solid #8a49a8;
+  background: var(--color-ink);
+  border: 2px solid var(--color-accent);
 }

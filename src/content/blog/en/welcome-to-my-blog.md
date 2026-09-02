@@ -1,6 +1,6 @@
 ---
 title: "Welcome to my technical blog"
-date: "2026-09-02"
+date: "2026-06-02"
 description: "Kickoff post: how this blog is built and what you can expect to read here."
 tags: [solidjs, vite, markdown]
 ---

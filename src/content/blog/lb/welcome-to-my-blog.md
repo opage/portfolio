@@ -1,6 +1,6 @@
 ---
 title: "Wëllkomm op mengem technesche Blog"
-date: "2026-09-02"
+date: "2026-06-02"
 description: "Optratt-Artikel: wéi dëse Blog gebaut ass a wat Iech hei erwaart."
 tags: [solidjs, vite, markdown]
 ---

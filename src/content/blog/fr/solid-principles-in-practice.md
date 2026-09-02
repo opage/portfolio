@@ -30,6 +30,81 @@ class Invoice {
 Extraire `print()` dans une classe dédiée `InvoicePrinter` permet à chaque
 préoccupation d'évoluer indépendamment.
 
+## Principe ouvert/fermé (OCP)
+
+Un module doit être ouvert à l'extension mais fermé à la modification — le
+nouveau comportement s'ajoute en écrivant du code, pas en réécrivant l'existant.
+
+```csharp
+public interface IDiscount
+{
+    decimal Apply(Order order);
+}
+
+public class SeasonalDiscount : IDiscount
+{
+    public decimal Apply(Order order) => order.Total * 0.10m;
+}
+
+public class LoyaltyDiscount : IDiscount
+{
+    public decimal Apply(Order order) => order.Total * 0.15m;
+}
+```
+
+Ajouter un nouveau type de remise revient à ajouter une classe ; les existantes
+restent intactes.
+
+## Substitution de Liskov (LSP)
+
+Les objets d'un sous-type doivent pouvoir être utilisés partout où le type parent
+est attendu, sans comportement surprenant.
+
+```csharp
+public class Rectangle
+{
+    public virtual int Width { get; set; }
+    public virtual int Height { get; set; }
+}
+
+public class Square : Rectangle
+{
+    public override int Width { set { base.Width = value; base.Height = value; } }
+    public override int Height { set { base.Width = value; base.Height = value; } }
+}
+```
+
+Un `Square` n'est pas un substitut fidèle de `Rectangle` — redimensionner un côté
+modifie silencieusement l'autre. Modélisez-les séparément ou derrière une
+abstraction commune.
+
+## Ségrégation des interfaces (ISP)
+
+Un client ne doit pas être forcé de dépendre de méthodes qu'il n'utilise jamais.
+Préférez plusieurs interfaces étroites à une seule interface large.
+
+```csharp
+// une interface trop large
+public interface IWorker
+{
+    void Work();
+    void Eat();
+}
+
+// des interfaces ciblées
+public interface IWorkable
+{
+    void Work();
+}
+
+public interface IEatable
+{
+    void Eat();
+}
+```
+
+Désormais, chaque classe n'implémente que ce dont elle a réellement besoin.
+
 ## Inversion des dépendances
 
 Les modules de haut niveau ne doivent pas dépendre des modules de bas niveau.

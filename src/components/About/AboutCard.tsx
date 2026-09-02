@@ -7,7 +7,7 @@ export default function AboutCard() {
   const { dict } = useI18n()
 
   return (
-    <div class="text-white">
+    <div class="text-ink">
       <blockquote class="m-0">
         <p class="text-left sm:text-justify">
           <For each={dict().about.lines}>
@@ -31,8 +31,8 @@ export default function AboutCard() {
           </For>
         </ul>
 
-        <p class="text-[rgb(155,126,172)]">{dict().about.quote}</p>
-        <footer class="text-[#a588c0]">{dict().about.quoteAuthor}</footer>
+        <p class="text-ink/60">{dict().about.quote}</p>
+        <footer class="text-accent">{dict().about.quoteAuthor}</footer>
       </blockquote>
     </div>
   )

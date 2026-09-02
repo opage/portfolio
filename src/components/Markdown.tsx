@@ -2,6 +2,8 @@ import { createEffect } from 'solid-js'
 import MarkdownIt from 'markdown-it'
 import hljs from 'highlight.js/lib/common'
 import 'highlight.js/styles/atom-one-dark.css'
+import { useTheme } from '../theme'
+import type { Theme } from '../theme'
 
 const md = new MarkdownIt({
   html: true,
@@ -29,22 +31,17 @@ md.renderer.rules.fence = (tokens, idx, options, env, self) => {
   return defaultFence(tokens, idx, options, env, self)
 }
 
-let mermaidInitialized = false
-
-async function renderMermaid(container: HTMLElement) {
+async function renderMermaid(container: HTMLElement, theme: Theme) {
   const nodes = container.querySelectorAll<HTMLElement>('.mermaid')
   if (nodes.length === 0) return
   try {
     const mermaid = (await import('mermaid')).default
-    if (!mermaidInitialized) {
-      mermaid.initialize({
-        startOnLoad: false,
-        theme: 'dark',
-        securityLevel: 'loose',
-        fontFamily: 'PT Mono, ui-monospace, monospace',
-      })
-      mermaidInitialized = true
-    }
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: theme === 'dark' ? 'dark' : 'default',
+      securityLevel: 'loose',
+      fontFamily: 'PT Mono, ui-monospace, monospace',
+    })
     await mermaid.run({ nodes })
   } catch {
     // keep the raw source as a fallback
@@ -52,12 +49,13 @@ async function renderMermaid(container: HTMLElement) {
 }
 
 export default function Markdown(props: { content: string }) {
+  const { theme } = useTheme()
   let container: HTMLDivElement | undefined
 
   createEffect(() => {
     if (!container) return
     container.innerHTML = md.render(props.content)
-    renderMermaid(container)
+    renderMermaid(container, theme())
   })
 
   return <div ref={container} class="markdown-body" />

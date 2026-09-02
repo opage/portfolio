@@ -1,6 +1,6 @@
 ---
 title: "Bienvenue sur mon blog technique"
-date: "2026-09-02"
+date: "2026-06-02"
 description: "Article d'ouverture : comment ce blog est construit et ce que vous y trouverez."
 tags: [solidjs, vite, markdown]
 ---

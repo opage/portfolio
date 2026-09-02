@@ -6,7 +6,7 @@ export default function Github() {
   const { dict } = useI18n()
 
   return (
-    <div class="flex flex-col items-center justify-center pb-3 text-white">
+    <div class="flex flex-col items-center justify-center pb-3 text-ink">
       <h1 class="pb-5 text-3xl font-medium">
         <RichText text={dict().github.heading} />
       </h1>
