@@ -14,7 +14,7 @@ function initials(name: string) {
 
 export default function Experience() {
   const { dict } = useI18n()
-  const [open, setOpen] = createSignal<number[]>([0, 1, 2])
+  const [open, setOpen] = createSignal<number[]>([0, 1, 2, 3])
 
   const isOpen = (i: number) => open().includes(i)
   const toggle = (i: number) =>
