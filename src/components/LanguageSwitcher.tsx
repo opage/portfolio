@@ -24,7 +24,7 @@ export default function LanguageSwitcher() {
               onClick={() => setLocale(item.code)}
               title={item.label}
               class={`flex items-center gap-1.5 rounded px-2 py-1 text-sm font-semibold transition-colors ${
-                active() ? 'bg-[#934cce5e] text-white' : 'text-white/60 hover:text-white'
+                active() ? 'bg-accent-soft text-ink' : 'text-ink/60 hover:text-ink'
               }`}
             >
               <Flag code={item.code} />

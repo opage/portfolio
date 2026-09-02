@@ -10,6 +10,7 @@ export const en: Dictionary = {
     experience: 'Experience',
     projects: 'Projects',
     resume: 'Resume',
+    blog: 'Blog',
     toggle: 'Toggle navigation',
     language: 'Language',
   },
@@ -93,8 +94,8 @@ export const en: Dictionary = {
         company: 'Advanzia Bank',
         role: 'Senior Backend Developer (C#)',
         location: 'Munsbach, LU',
-        period: 'Sept 2025 – May 2026',
-        duration: '9 months',
+        period: 'Sept 2025 – June 2026',
+        duration: '10 months',
         summary:
           'Digital fintech bank specializing in credit cards, payment solutions, and cards-as-a-service for customers and partners across Europe.',
         highlights: [
@@ -281,6 +282,14 @@ export const en: Dictionary = {
   },
   resume: {
     download: 'Download CV',
+  },
+  blog: {
+    heading: 'Technical **Blog**',
+    subtitle: 'Notes and deep dives on software engineering.',
+    readMore: 'Read more',
+    back: 'Back to articles',
+    minutes: 'min read',
+    notFound: 'Article not found.',
   },
   footer: {
     designed: 'Designed and Developed by Olivier Page',

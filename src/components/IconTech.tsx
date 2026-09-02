@@ -9,7 +9,7 @@ export default function IconTech(props: IconTechProps) {
   return (
     <div class="tech-icon">
       {props.children}
-      <span class="text-white">{props.label}</span>
+      <span class="text-ink">{props.label}</span>
     </div>
   )
 }

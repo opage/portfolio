@@ -2,16 +2,19 @@ import { createSignal, onMount, onCleanup, lazy, Suspense } from 'solid-js'
 import { HashRouter, Route, Navigate } from '@solidjs/router'
 import type { RouteSectionProps } from '@solidjs/router'
 import { I18nProvider, useI18n } from './i18n'
+import { ThemeProvider } from './theme'
 import Preloader from './components/Preloader'
 import Navbar from './components/Navbar'
 import ScrollToTop from './components/ScrollToTop'
 import Footer from './components/Footer'
 
-const Home = lazy(() => import('./components/Home/Home'))
-const About = lazy(() => import('./components/About/About'))
-const Experience = lazy(() => import('./components/Experience/Experience'))
-const Projects = lazy(() => import('./components/Projects/Projects'))
-const Resume = lazy(() => import('./components/Resume/Resume'))
+const Home = lazy(() => import('./pages/Home/Home'))
+const About = lazy(() => import('./pages/About/About'))
+const Experience = lazy(() => import('./pages/Experience/Experience'))
+const Projects = lazy(() => import('./pages/Projects/Projects'))
+const Resume = lazy(() => import('./pages/Resume/Resume'))
+const Blog = lazy(() => import('./pages/Blog/Blog'))
+const BlogPost = lazy(() => import('./pages/Blog/BlogPost'))
 
 function RedirectHome() {
   return <Navigate href="/" />
@@ -20,7 +23,7 @@ function RedirectHome() {
 function LoadingFallback() {
   const { dict } = useI18n()
   return (
-    <div class="flex min-h-screen items-center justify-center text-white">
+    <div class="flex min-h-screen items-center justify-center text-ink">
       {dict().loading}
     </div>
   )
@@ -50,14 +53,18 @@ function Layout(props: RouteSectionProps) {
 export default function App() {
   return (
     <I18nProvider>
-      <HashRouter root={Layout}>
-        <Route path="/" component={Home} />
-        <Route path="/about" component={About} />
-        <Route path="/experience" component={Experience} />
-        <Route path="/projects" component={Projects} />
-        <Route path="/resume" component={Resume} />
-        <Route path="*" component={RedirectHome} />
-      </HashRouter>
+      <ThemeProvider>
+        <HashRouter root={Layout}>
+          <Route path="/" component={Home} />
+          <Route path="/about" component={About} />
+          <Route path="/experience" component={Experience} />
+          <Route path="/projects" component={Projects} />
+          <Route path="/resume" component={Resume} />
+          <Route path="/blog" component={Blog} />
+          <Route path="/blog/:slug" component={BlogPost} />
+          <Route path="*" component={RedirectHome} />
+        </HashRouter>
+      </ThemeProvider>
     </I18nProvider>
   )
 }
