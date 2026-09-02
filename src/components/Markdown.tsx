@@ -1,9 +1,12 @@
 import { createEffect } from 'solid-js'
 import MarkdownIt from 'markdown-it'
 import hljs from 'highlight.js/lib/common'
+import powershell from 'highlight.js/lib/languages/powershell'
 import 'highlight.js/styles/atom-one-dark.css'
 import { useTheme } from '../theme'
 import type { Theme } from '../theme'
+
+hljs.registerLanguage('powershell', powershell)
 
 const md = new MarkdownIt({
   html: true,
