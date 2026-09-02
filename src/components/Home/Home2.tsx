@@ -9,7 +9,7 @@ export default function Home2() {
   return (
     <div class="relative py-10 md:py-16">
       <div class="mx-auto flex max-w-6xl flex-col items-center gap-8 px-4 md:flex-row md:gap-10">
-        <div class="flex-1 text-center text-white">
+        <div class="flex-1 text-center text-ink">
           <h1 class="text-balance text-2xl font-semibold sm:text-3xl md:text-4xl">
             <RichText text={dict().intro.heading} />
           </h1>

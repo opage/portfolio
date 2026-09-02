@@ -24,7 +24,7 @@ export default function Particles() {
       <For each={particles}>
         {(p) => (
           <span
-            class="absolute bottom-0 rounded-full bg-purple-300"
+            class="absolute bottom-0 rounded-full bg-accent/60"
             style={{
               left: `${p.left}%`,
               width: `${p.size}px`,

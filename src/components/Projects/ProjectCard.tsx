@@ -10,7 +10,7 @@ export default function ProjectCard(props: ProjectCardProps) {
   const { dict } = useI18n()
 
   return (
-    <div class="card-hover flex h-full flex-col overflow-hidden rounded-lg border border-purple-500/30 bg-transparent text-white opacity-90 shadow-[0_4px_5px_3px_rgba(119,53,136,0.459)]">
+    <div class="card-hover flex h-full flex-col overflow-hidden rounded-lg border border-accent/30 bg-transparent text-ink opacity-90 shadow-[0_4px_5px_3px_rgba(119,53,136,0.459)]">
       <img
         src={props.img}
         alt={props.title}
@@ -18,14 +18,14 @@ export default function ProjectCard(props: ProjectCardProps) {
       />
       <div class="flex flex-1 flex-col p-4 sm:p-5">
         <h3 class="text-lg font-semibold leading-snug sm:text-xl">{props.title}</h3>
-        <p class="mt-1 text-sm font-medium text-[#c770f0]">{props.company}</p>
-        <p class="mt-3 text-sm leading-relaxed text-white/90">{props.description}</p>
+        <p class="mt-1 text-sm font-medium text-accent">{props.company}</p>
+        <p class="mt-3 text-sm leading-relaxed text-ink/90">{props.description}</p>
 
         <div class="mt-auto pt-4">
           <div class="flex flex-wrap gap-2">
             <For each={props.tech}>
               {(tech) => (
-                <span class="rounded-full border border-purple-400/40 px-2.5 py-0.5 text-xs text-white/80">
+                <span class="rounded-full border border-accent/40 px-2.5 py-0.5 text-xs text-ink/80">
                   {tech}
                 </span>
               )}

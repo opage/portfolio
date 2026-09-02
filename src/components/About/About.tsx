@@ -12,7 +12,7 @@ export default function About() {
   const { dict } = useI18n()
 
   return (
-    <div class="relative z-0 pt-28 pb-8 text-white md:pt-36">
+    <div class="relative z-0 pt-28 pb-8 text-ink md:pt-36">
       <Particles />
       <div class="relative z-10 mx-auto max-w-6xl px-4">
         <div class="flex flex-col items-center justify-center gap-6 py-4 md:flex-row md:gap-8">
@@ -38,9 +38,9 @@ export default function About() {
         <div class="mx-auto grid max-w-4xl grid-cols-1 gap-4 pb-6 sm:grid-cols-2 lg:grid-cols-3">
           <For each={dict().about.softSkillsItems}>
             {(skill) => (
-              <div class="flex flex-col gap-1 rounded-lg border border-purple-500/30 bg-white/5 p-4 text-left">
-                <h3 class="text-base font-semibold text-[#c770f0]">{skill.title}</h3>
-                <p class="text-sm leading-relaxed text-white/80">{skill.description}</p>
+              <div class="flex flex-col gap-1 rounded-lg border border-accent/30 bg-surface p-4 text-left">
+                <h3 class="text-base font-semibold text-accent">{skill.title}</h3>
+                <p class="text-sm leading-relaxed text-ink/80">{skill.description}</p>
               </div>
             )}
           </For>

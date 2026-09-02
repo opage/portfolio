@@ -19,19 +19,19 @@ export default function BlogPost() {
           <AiOutlineArrowLeft /> {dict().blog.back}
         </A>
 
-        <Show when={post()} fallback={<p class="mt-8 text-white">{dict().blog.notFound}</p>}>
+        <Show when={post()} fallback={<p class="mt-8 text-ink">{dict().blog.notFound}</p>}>
           {(p) => (
             <article class="mt-6">
               <header>
-                <h1 class="text-balance text-2xl font-semibold text-white sm:text-3xl md:text-4xl">
+                <h1 class="text-balance text-2xl font-semibold text-ink sm:text-3xl md:text-4xl">
                   {p().title}
                 </h1>
-                <div class="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-white/60">
+                <div class="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-ink/60">
                   <time>{formatDate(p().date, locale())}</time>
                   <div class="flex flex-wrap gap-2">
                     <For each={p().tags}>
                       {(tag) => (
-                        <span class="rounded-full border border-purple-400/40 px-2.5 py-0.5 text-xs text-white/80">
+                        <span class="rounded-full border border-accent/40 px-2.5 py-0.5 text-xs text-ink/80">
                           {tag}
                         </span>
                       )}

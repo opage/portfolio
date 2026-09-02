@@ -25,7 +25,7 @@ export default function Resume() {
           <iframe
             src={`${pdf()}#view=FitH`}
             title={dict().resume.download}
-            class="h-[60vh] w-full max-w-3xl rounded-lg border border-purple-500/30 sm:h-[70vh] md:h-[80vh]"
+            class="h-[60vh] w-full max-w-3xl rounded-lg border border-accent/30 sm:h-[70vh] md:h-[80vh]"
           />
         </div>
 
