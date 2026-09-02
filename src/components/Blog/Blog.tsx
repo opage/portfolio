@@ -1,12 +1,13 @@
-import { For } from 'solid-js'
+import { For, createMemo } from 'solid-js'
 import { A } from '@solidjs/router'
 import Particles from '../Particles'
 import RichText from '../RichText'
-import { posts, formatDate, readingTime } from '../../data/blog'
+import { getPosts, formatDate, readingTime } from '../../data/blog'
 import { useI18n } from '../../i18n'
 
 export default function Blog() {
   const { dict, locale } = useI18n()
+  const posts = createMemo(() => getPosts(locale()))
 
   return (
     <div class="relative z-0 pt-28 pb-8 md:pt-36">
@@ -18,7 +19,7 @@ export default function Blog() {
         <p class="mt-2 text-center text-white">{dict().blog.subtitle}</p>
 
         <div class="mt-8 space-y-5">
-          <For each={posts}>
+          <For each={posts()}>
             {(post) => (
               <A
                 href={`/blog/${post.slug}`}
