@@ -92,6 +92,130 @@ CREATE TABLE "order" (
 `CASCADE` deletes the child when the parent goes; `SET NULL` clears the column;
 `RESTRICT` blocks the change.
 
+## SQL commands: DDL, DQL, DML, DCL, TCL
+
+SQL divides into five command families.
+
+### DDL — Data Definition Language
+
+Defines and changes the schema.
+
+```sql
+CREATE TABLE product (
+  id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  price NUMERIC(10, 2) NOT NULL
+);
+
+ALTER TABLE product ADD COLUMN active BOOLEAN DEFAULT true;
+
+DROP TABLE product;
+```
+
+### DQL — Data Query Language
+
+Reads data. It is just `SELECT`.
+
+```sql
+SELECT id, name, price
+FROM product
+WHERE active
+ORDER BY price DESC;
+```
+
+### DML — Data Manipulation Language
+
+Changes the data: `INSERT`, `UPDATE`, `DELETE`.
+
+```sql
+INSERT INTO product (name, price) VALUES ('Keyboard', 89.90);
+
+UPDATE product SET price = 79.90 WHERE name = 'Keyboard';
+
+DELETE FROM product WHERE id = 1;
+```
+
+`UPDATE` and `DELETE` must carry a `WHERE` clause — without one they affect
+every row.
+
+### DCL — Data Control Language
+
+Manages permissions with `GRANT` and `REVOKE`.
+
+```sql
+GRANT SELECT, INSERT, UPDATE ON product TO app_user;
+REVOKE DELETE ON product FROM app_user;
+```
+
+### TCL — Transaction Control Language
+
+Controls transactions with `COMMIT`, `ROLLBACK`, and `SAVEPOINT`.
+
+```sql
+BEGIN;
+
+UPDATE accounts SET balance = balance - 100 WHERE id = 1;
+SAVEPOINT before_credit;
+UPDATE accounts SET balance = balance + 100 WHERE id = 2;
+
+ROLLBACK TO before_credit;
+COMMIT;
+```
+
+## Joins
+
+Joins combine rows from two or more tables using a join condition.
+
+```sql
+-- INNER JOIN: only matching rows
+SELECT c.name, o.id AS order_id, o.total
+FROM customer c
+JOIN "order" o ON o.customer_id = c.id;
+
+-- LEFT JOIN: all customers, even without orders (NULL on the right)
+SELECT c.name, o.id AS order_id
+FROM customer c
+LEFT JOIN "order" o ON o.customer_id = c.id;
+
+-- RIGHT JOIN: all orders, even without a customer (NULL on the left)
+SELECT c.name, o.id AS order_id
+FROM customer c
+RIGHT JOIN "order" o ON o.customer_id = c.id;
+
+-- FULL OUTER JOIN: both sides, NULL where missing
+SELECT c.name, o.id AS order_id
+FROM customer c
+FULL OUTER JOIN "order" o ON o.customer_id = c.id;
+```
+
+```sql
+-- CROSS JOIN: every combination of rows
+SELECT c.name, p.name
+FROM customer c
+CROSS JOIN product p;
+```
+
+```sql
+-- self join: employees and their managers
+SELECT e.name AS employee, m.name AS manager
+FROM employee e
+LEFT JOIN employee m ON m.id = e.manager_id;
+```
+
+Joins pair naturally with aggregation:
+
+```sql
+-- order totals from line items
+SELECT o.id, SUM(ol.quantity * p.price) AS total
+FROM "order" o
+JOIN order_line ol ON ol.order_id = o.id
+JOIN product p ON p.id = ol.product_id
+GROUP BY o.id;
+```
+
+Use table aliases (`c`, `o`) for readability, and keep the join condition in
+`ON` rather than `WHERE` so the intent stays clear.
+
 ## Indexes
 
 An index speeds up lookups at the cost of write performance and storage. Most
@@ -200,6 +324,30 @@ SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
 - **Read committed** — each statement sees a stable snapshot.
 - **Repeatable read** — the whole transaction sees one snapshot.
 - **Serializable** — transactions behave as if run one at a time.
+
+## Key practices
+
+- **Use stored procedures for CRUD** — centralize the data logic in one place
+  and grant access to the procedure instead of the table.
+- **Use parameterized queries** — never concatenate user input into SQL; bind
+  values as parameters to prevent SQL injection.
+- **Manage permissions** — let users execute CRUD procedures without direct
+  table access.
+
+```sql
+-- parameterized query: the value is bound as data, not SQL
+SELECT id, name FROM customer WHERE email = $1;
+```
+
+```sql
+-- grant execution through a procedure, not the table
+GRANT EXECUTE ON PROCEDURE create_customer TO app_user;
+REVOKE ALL ON customer FROM app_user;
+```
+
+Parameterized statements separate the SQL from the values, so input is treated
+as data. Combined with procedure-level grants, the surface stays small and
+auditable.
 
 ## Wrapping up
 

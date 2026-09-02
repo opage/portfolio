@@ -94,6 +94,130 @@ CREATE TABLE "order" (
 `CASCADE` läscht d'Kand, wann den Elter verschwënnt; `SET NULL` läscht d'Spalt;
 `RESTRICT` blockéiert d'Ännerung.
 
+## SQL-Commande: DDL, DQL, DML, DCL, TCL
+
+SQL deelt sech a fënnef Commandefamillen op.
+
+### DDL — Data Definition Language
+
+Definéiert an ännert de Schema.
+
+```sql
+CREATE TABLE product (
+  id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  price NUMERIC(10, 2) NOT NULL
+);
+
+ALTER TABLE product ADD COLUMN active BOOLEAN DEFAULT true;
+
+DROP TABLE product;
+```
+
+### DQL — Data Query Language
+
+Liest Daten. Et ass einfach `SELECT`.
+
+```sql
+SELECT id, name, price
+FROM product
+WHERE active
+ORDER BY price DESC;
+```
+
+### DML — Data Manipulation Language
+
+Ännert d'Donnéeën: `INSERT`, `UPDATE`, `DELETE`.
+
+```sql
+INSERT INTO product (name, price) VALUES ('Keyboard', 89.90);
+
+UPDATE product SET price = 79.90 WHERE name = 'Keyboard';
+
+DELETE FROM product WHERE id = 1;
+```
+
+`UPDATE` an `DELETE` mussen eng `WHERE`-Klausel droen — ouni si betreffen se
+all Zeil.
+
+### DCL — Data Control Language
+
+Geréiert Permissiounen mat `GRANT` a `REVOKE`.
+
+```sql
+GRANT SELECT, INSERT, UPDATE ON product TO app_user;
+REVOKE DELETE ON product FROM app_user;
+```
+
+### TCL — Transaction Control Language
+
+Kontrolléiert Transaktioune mat `COMMIT`, `ROLLBACK` a `SAVEPOINT`.
+
+```sql
+BEGIN;
+
+UPDATE accounts SET balance = balance - 100 WHERE id = 1;
+SAVEPOINT before_credit;
+UPDATE accounts SET balance = balance + 100 WHERE id = 2;
+
+ROLLBACK TO before_credit;
+COMMIT;
+```
+
+## Joins (Jointuren)
+
+Joins kombinéieren Zeilen aus zwou oder méi Tabellen iwwer eng Join-Bedingung.
+
+```sql
+-- INNER JOIN: only matching rows
+SELECT c.name, o.id AS order_id, o.total
+FROM customer c
+JOIN "order" o ON o.customer_id = c.id;
+
+-- LEFT JOIN: all customers, even without orders (NULL on the right)
+SELECT c.name, o.id AS order_id
+FROM customer c
+LEFT JOIN "order" o ON o.customer_id = c.id;
+
+-- RIGHT JOIN: all orders, even without a customer (NULL on the left)
+SELECT c.name, o.id AS order_id
+FROM customer c
+RIGHT JOIN "order" o ON o.customer_id = c.id;
+
+-- FULL OUTER JOIN: both sides, NULL where missing
+SELECT c.name, o.id AS order_id
+FROM customer c
+FULL OUTER JOIN "order" o ON o.customer_id = c.id;
+```
+
+```sql
+-- CROSS JOIN: every combination of rows
+SELECT c.name, p.name
+FROM customer c
+CROSS JOIN product p;
+```
+
+```sql
+-- self join: employees and their managers
+SELECT e.name AS employee, m.name AS manager
+FROM employee e
+LEFT JOIN employee m ON m.id = e.manager_id;
+```
+
+Joins passen natierlech mat Aggregatioun zesummen:
+
+```sql
+-- order totals from line items
+SELECT o.id, SUM(ol.quantity * p.price) AS total
+FROM "order" o
+JOIN order_line ol ON ol.order_id = o.id
+JOIN product p ON p.id = ol.product_id
+GROUP BY o.id;
+```
+
+Benotzt Table-Aliase (`c`, `o`) fir d'Liesbarkeet, an haalt d'Join-Bedingung am
+`ON` amplaz am `WHERE`, fir datt d'Intent kloer bleift.
+
 ## Indexen
 
 En Index beschleunegt Lookups op Käschte vu Schreifperformance a Späicher. Déi
@@ -204,6 +328,30 @@ SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
 - **Read committed** — all Ausso gesäit e stabilen Snapshot.
 - **Repeatable read** — déi ganz Transaktioun gesäit ee Snapshot.
 - **Serializable** — Transaktioune behuele sech, wéi wa se eng no där anerer lafen.
+
+## Wichteg Praktiken
+
+- **Benotzt Stored Procedures fir de CRUD** — zentraliséiert d'Datelogik op enger
+  Plaz a gëtt Zougang op d'Prozedur amplaz op d'Tabelle.
+- **Benotzt parametriséiert Querien** — concatenéiert ni Benotzerinput an SQL;
+  bindt Wäerter als Parameter, fir SQL-Injektioun ze verhënneren.
+- **Gitt Permissiounen** — loosst Benotzer CRUD-Prozeduren ausféieren, ouni
+  direkten Tabellenzougang.
+
+```sql
+-- parameterized query: the value is bound as data, not SQL
+SELECT id, name FROM customer WHERE email = $1;
+```
+
+```sql
+-- grant execution through a procedure, not the table
+GRANT EXECUTE ON PROCEDURE create_customer TO app_user;
+REVOKE ALL ON customer FROM app_user;
+```
+
+Parametriséiert Aussoen trennen de SQL vun de Wäerter, sou datt Input als Daten
+behandelt gëtt. Kombinéiert mat Prozedurniveau-Permissioune bleift d'Uewerfläch
+kleng an auditéierbar.
 
 ## Zum Schluss
 
