@@ -95,7 +95,7 @@ export const en: Dictionary = {
         role: 'Senior Backend Developer (C#)',
         location: 'Munsbach, LU',
         period: 'Sept 2025 – June 2026',
-        duration: '9 months',
+        duration: '10 months',
         summary:
           'Digital fintech bank specializing in credit cards, payment solutions, and cards-as-a-service for customers and partners across Europe.',
         highlights: [
