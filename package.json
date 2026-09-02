@@ -10,11 +10,15 @@
   },
   "dependencies": {
     "@solidjs/router": "^1.0.0",
-    "solid-js": "^1.9.15",
-    "solid-icons": "^1.2.0"
+    "highlight.js": "^11.12.0",
+    "markdown-it": "^15.0.1",
+    "mermaid": "^11.17.2",
+    "solid-icons": "^1.2.0",
+    "solid-js": "^1.9.15"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.3.3",
+    "@types/markdown-it": "^14.2.0",
     "@types/node": "^24.13.3",
     "tailwindcss": "^4.3.3",
     "typescript": "~6.0.2",

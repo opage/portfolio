@@ -12,6 +12,8 @@ const About = lazy(() => import('./components/About/About'))
 const Experience = lazy(() => import('./components/Experience/Experience'))
 const Projects = lazy(() => import('./components/Projects/Projects'))
 const Resume = lazy(() => import('./components/Resume/Resume'))
+const Blog = lazy(() => import('./components/Blog/Blog'))
+const BlogPost = lazy(() => import('./components/Blog/BlogPost'))
 
 function RedirectHome() {
   return <Navigate href="/" />
@@ -56,6 +58,8 @@ export default function App() {
         <Route path="/experience" component={Experience} />
         <Route path="/projects" component={Projects} />
         <Route path="/resume" component={Resume} />
+        <Route path="/blog" component={Blog} />
+        <Route path="/blog/:slug" component={BlogPost} />
         <Route path="*" component={RedirectHome} />
       </HashRouter>
     </I18nProvider>

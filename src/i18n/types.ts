@@ -41,6 +41,7 @@ export interface Dictionary {
     experience: string
     projects: string
     resume: string
+    blog: string
     toggle: string
     language: string
   }
@@ -89,6 +90,14 @@ export interface Dictionary {
   }
   resume: {
     download: string
+  }
+  blog: {
+    heading: string
+    subtitle: string
+    readMore: string
+    back: string
+    minutes: string
+    notFound: string
   }
   footer: {
     designed: string
