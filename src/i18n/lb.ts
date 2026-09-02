@@ -95,7 +95,7 @@ export const lb: Dictionary = {
         role: 'Senior Backend Entwéckler (C#)',
         location: 'Munsbach, LU',
         period: 'Sept 2025 – Juni 2026',
-        duration: '9 Méint',
+        duration: '10 Méint',
         summary:
           'Digital Fintech-Bank, spezialiséiert op Kreditkaarten, Bezuel-Léisungen a Cards-as-a-Service fir Clienten a Partner uechter Europa.',
         highlights: [
