@@ -94,7 +94,7 @@ export const fr: Dictionary = {
         company: 'Advanzia Bank',
         role: 'Développeur Backend Senior (C#)',
         location: 'Munsbach, LU',
-        period: 'Sept 2025 – Mai 2026',
+        period: 'Sept 2025 – Juin 2026',
         duration: '9 mois',
         summary:
           'Fintech digitale spécialisée dans les cartes de crédit, les solutions de paiement et le cards-as-a-service pour les clients et partenaires en Europe.',
