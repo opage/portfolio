@@ -247,13 +247,84 @@ The qualifier is the bean name — by default the class name with a lowercase
 first letter. You can set an explicit name with `@Service("paypal")` or
 `@Bean("paypal")`.
 
-Beans are **singletons** by default; request other scopes explicitly.
+Spring provides several bean scopes. `singleton` (the default) creates one
+instance per container; `prototype` creates a new instance on every request;
+the web scopes (`request`, `session`, `application`, `websocket`) are tied to a
+web context.
 
 ```java
+// singleton (default) — one instance per container
+@Component
+public class SingletonService { }
+
+// prototype — a new instance on every injection
 @Component
 @Scope("prototype")
 public class ShoppingCart { }
+
+// request — one instance per HTTP request
+@Component
+@Scope(value = WebApplicationContext.SCOPE_REQUEST,
+       proxyMode = ScopedProxyMode.TARGET_CLASS)
+public class RequestContext { }
+
+// session — one instance per HTTP session
+@Component
+@Scope(value = WebApplicationContext.SCOPE_SESSION,
+       proxyMode = ScopedProxyMode.TARGET_CLASS)
+public class UserSession { }
+
+// application — one instance per ServletContext
+@Component
+@Scope(value = WebApplicationContext.SCOPE_APPLICATION)
+public class AppWideConfig { }
+
+// websocket — one instance per WebSocket session
+@Component
+@Scope(value = "websocket",
+       proxyMode = ScopedProxyMode.TARGET_CLASS)
+public class ChatSession { }
 ```
+
+The short-lived scopes (`request`, `session`, `websocket`) need
+`proxyMode = ScopedProxyMode.TARGET_CLASS` so they can be injected into
+longer-lived singletons.
+
+Spring ships shorthand annotations for the common web scopes:
+
+```java
+@Component
+@RequestScope
+public class RequestContext { }
+
+@Component
+@SessionScope
+public class UserSession { }
+
+@Component
+@ApplicationScope
+public class AppWideConfig { }
+```
+
+`@RequestScope` and `@SessionScope` are shortcuts for the `@Scope` version with
+`proxyMode = ScopedProxyMode.TARGET_CLASS`. There is no shorthand for
+`prototype` or `websocket` — use `@Scope` for those.
+
+Here is the complete set:
+
+| Scope | Lifetime | Shorthand |
+| --- | --- | --- |
+| `singleton` | One instance per container | default |
+| `prototype` | New instance on every request | — |
+| `request` | One instance per HTTP request | `@RequestScope` |
+| `session` | One instance per HTTP session | `@SessionScope` |
+| `application` | One instance per `ServletContext` | `@ApplicationScope` |
+| `websocket` | One instance per WebSocket session | — |
+
+In short, the shorthand annotations are `@RequestScope`, `@SessionScope`, and
+`@ApplicationScope`. Spring Cloud also ships `@RefreshScope` for
+`@Scope("refresh")`. There is no shorthand for `singleton` (the default),
+`prototype`, or `websocket`.
 
 `@SpringBootApplication` enables component scanning over its package, so any
 annotated class there is picked up automatically.

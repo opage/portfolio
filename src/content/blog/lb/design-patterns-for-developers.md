@@ -22,9 +22,11 @@ flowchart TD
     C --> C3[Facade]
     D --> D1[Strategy]
     D --> D2[Observer]
+    D --> D3[Chain of Responsibility]
     E --> E1[MVC]
     E --> E2[MVVM]
     E --> E3[CQRS]
+    E --> E4[Event Sourcing]
 ```
 
 ## Strategy (Strategie)
@@ -115,6 +117,72 @@ public class NewsFeed
         _listeners.ForEach(listener => listener.Notify(message));
 }
 ```
+
+## Chain of Responsibility (Verantwortungskette)
+
+**D'Iddi:** eng Ufro laanscht eng Kette vun Handler weiderginn, bis een se
+behandelt.
+
+Wéi de Clientssupport: en Ticket gëtt Niveau fir Niveau eskaléiert, bis een e
+léise kann. All Handler entscheet, ob en d'Ufro behandelt oder weidergëtt.
+
+```csharp
+public interface IHandler
+{
+    IHandler SetNext(IHandler handler);
+    void Handle(string request);
+}
+
+public abstract class BaseHandler : IHandler
+{
+    private IHandler? _next;
+
+    public IHandler SetNext(IHandler handler)
+    {
+        _next = handler;
+        return handler;
+    }
+
+    public virtual void Handle(string request)
+    {
+        _next?.Handle(request);
+    }
+}
+
+public class AuthHandler : BaseHandler
+{
+    public override void Handle(string request)
+    {
+        if (request.StartsWith("auth"))
+        {
+            Console.WriteLine("Auth passed");
+            base.Handle(request);
+        }
+        else
+        {
+            Console.WriteLine("Auth failed — stop");
+        }
+    }
+}
+
+public class LoggingHandler : BaseHandler
+{
+    public override void Handle(string request)
+    {
+        Console.WriteLine($"Logging: {request}");
+        base.Handle(request);
+    }
+}
+
+var logging = new LoggingHandler();
+var auth = new AuthHandler();
+logging.SetNext(auth);
+
+logging.Handle("auth:user-42");
+```
+
+All Handler kennt nëmmen deen nächsten, sou datt d'Kette ëmgeordert oder
+erweidert ka ginn, ouni déi existéierend Handler z'änneren.
 
 ## Singleton
 
@@ -276,6 +344,58 @@ public class GetOrderHandler
     public Order Handle(GetOrderQuery query) => /* load the order */ null!;
 }
 ```
+
+## Event Sourcing (Event-Sourcing)
+
+**D'Iddi:** all Zoustandsännerung als immutabel Event späicheren, an den
+aktuellen Zoustand nei opbauen, andeems een dës Eventen nei ofspillt.
+
+Amplaz deen aktuelle Saldo ze späicheren, späichert Dir « 100 ageluecht »,
+« 40 ofgehuewen ». De Saldo ass eng Projektioun, déi Dir zu all Moment nei
+bereche kënnt.
+
+```csharp
+public interface IEvent { }
+
+public record AccountOpened(Guid AccountId, string Owner) : IEvent;
+public record MoneyDeposited(Guid AccountId, decimal Amount) : IEvent;
+public record MoneyWithdrawn(Guid AccountId, decimal Amount) : IEvent;
+
+public class Account
+{
+    public Guid Id { get; private set; }
+    public decimal Balance { get; private set; }
+
+    public void Apply(IEvent @event)
+    {
+        switch (@event)
+        {
+            case AccountOpened e:
+                Id = e.AccountId;
+                break;
+            case MoneyDeposited e:
+                Balance += e.Amount;
+                break;
+            case MoneyWithdrawn e:
+                Balance -= e.Amount;
+                break;
+        }
+    }
+}
+```
+
+```csharp
+// lueden = d'Geschicht nei ofspillen
+var account = new Account();
+foreach (var @event in eventStore.Load(accountId))
+{
+    account.Apply(@event);
+}
+```
+
+Event Sourcing gëtt Iech eng komplett Audit-Spur, mécht den Zoustand
+reproduzéierbar a passt natierlech mat CQRS zesummen — mee et kascht méi
+Späicher a Komplexitéit.
 
 ## Zum Schluss
 

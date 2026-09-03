@@ -22,9 +22,11 @@ flowchart TD
     C --> C3[Facade]
     D --> D1[Strategy]
     D --> D2[Observer]
+    D --> D3[Chain of Responsibility]
     E --> E1[MVC]
     E --> E2[MVVM]
     E --> E3[CQRS]
+    E --> E4[Event Sourcing]
 ```
 
 ## Strategy (Stratégie)
@@ -116,6 +118,73 @@ public class NewsFeed
         _listeners.ForEach(listener => listener.Notify(message));
 }
 ```
+
+## Chaîne de responsabilité (Chain of Responsibility)
+
+**L'idée :** faire passer une requête le long d'une chaîne de gestionnaires
+jusqu'à ce que l'un d'eux la traite.
+
+Comme le support client : un ticket est escaladé niveau par niveau jusqu'à ce
+que quelqu'un puisse le résoudre. Chaque gestionnaire décide de traiter la
+requête ou de la transmettre.
+
+```csharp
+public interface IHandler
+{
+    IHandler SetNext(IHandler handler);
+    void Handle(string request);
+}
+
+public abstract class BaseHandler : IHandler
+{
+    private IHandler? _next;
+
+    public IHandler SetNext(IHandler handler)
+    {
+        _next = handler;
+        return handler;
+    }
+
+    public virtual void Handle(string request)
+    {
+        _next?.Handle(request);
+    }
+}
+
+public class AuthHandler : BaseHandler
+{
+    public override void Handle(string request)
+    {
+        if (request.StartsWith("auth"))
+        {
+            Console.WriteLine("Auth passed");
+            base.Handle(request);
+        }
+        else
+        {
+            Console.WriteLine("Auth failed — stop");
+        }
+    }
+}
+
+public class LoggingHandler : BaseHandler
+{
+    public override void Handle(string request)
+    {
+        Console.WriteLine($"Logging: {request}");
+        base.Handle(request);
+    }
+}
+
+var logging = new LoggingHandler();
+var auth = new AuthHandler();
+logging.SetNext(auth);
+
+logging.Handle("auth:user-42");
+```
+
+Chaque gestionnaire ne connaît que le suivant, donc la chaîne peut être
+réordonnée ou étendue sans modifier les gestionnaires existants.
 
 ## Singleton
 
@@ -278,6 +347,58 @@ public class GetOrderHandler
     public Order Handle(GetOrderQuery query) => /* load the order */ null!;
 }
 ```
+
+## Event Sourcing (Sourcing d'événements)
+
+**L'idée :** stocker chaque changement d'état comme un événement immuable, et
+reconstruire l'état courant en rejouant ces événements.
+
+Au lieu d'enregistrer le solde actuel, vous enregistrez « déposé 100 »,
+« retiré 40 ». Le solde est une projection que vous pouvez recalculer à tout
+moment.
+
+```csharp
+public interface IEvent { }
+
+public record AccountOpened(Guid AccountId, string Owner) : IEvent;
+public record MoneyDeposited(Guid AccountId, decimal Amount) : IEvent;
+public record MoneyWithdrawn(Guid AccountId, decimal Amount) : IEvent;
+
+public class Account
+{
+    public Guid Id { get; private set; }
+    public decimal Balance { get; private set; }
+
+    public void Apply(IEvent @event)
+    {
+        switch (@event)
+        {
+            case AccountOpened e:
+                Id = e.AccountId;
+                break;
+            case MoneyDeposited e:
+                Balance += e.Amount;
+                break;
+            case MoneyWithdrawn e:
+                Balance -= e.Amount;
+                break;
+        }
+    }
+}
+```
+
+```csharp
+// chargement = rejouer l'historique
+var account = new Account();
+foreach (var @event in eventStore.Load(accountId))
+{
+    account.Apply(@event);
+}
+```
+
+Le sourcing d'événements offre une piste d'audit complète, rend l'état
+reproductible et se marie naturellement avec CQRS — mais il coûte plus de
+stockage et de complexité.
 
 ## Pour conclure
 

@@ -253,14 +253,84 @@ Le qualifier est le nom du bean — par défaut le nom de classe avec une premi�
 lettre minuscule. Vous pouvez fixer un nom explicite avec `@Service("paypal")`
 ou `@Bean("paypal")`.
 
-Les beans sont des **singletons** par défaut ; demandez d'autres scopes
-explicitement.
+Spring propose plusieurs scopes de beans. `singleton` (par défaut) crée une
+instance par conteneur ; `prototype` crée une nouvelle instance à chaque
+demande ; les scopes web (`request`, `session`, `application`, `websocket`) sont
+liés à un contexte web.
 
 ```java
+// singleton (default) — one instance per container
+@Component
+public class SingletonService { }
+
+// prototype — a new instance on every injection
 @Component
 @Scope("prototype")
 public class ShoppingCart { }
+
+// request — one instance per HTTP request
+@Component
+@Scope(value = WebApplicationContext.SCOPE_REQUEST,
+       proxyMode = ScopedProxyMode.TARGET_CLASS)
+public class RequestContext { }
+
+// session — one instance per HTTP session
+@Component
+@Scope(value = WebApplicationContext.SCOPE_SESSION,
+       proxyMode = ScopedProxyMode.TARGET_CLASS)
+public class UserSession { }
+
+// application — one instance per ServletContext
+@Component
+@Scope(value = WebApplicationContext.SCOPE_APPLICATION)
+public class AppWideConfig { }
+
+// websocket — one instance per WebSocket session
+@Component
+@Scope(value = "websocket",
+       proxyMode = ScopedProxyMode.TARGET_CLASS)
+public class ChatSession { }
 ```
+
+Les scopes à courte durée (`request`, `session`, `websocket`) nécessitent
+`proxyMode = ScopedProxyMode.TARGET_CLASS` pour pouvoir être injectés dans des
+singletons à plus longue durée.
+
+Spring fournit des annotations raccourcies pour les scopes web courants :
+
+```java
+@Component
+@RequestScope
+public class RequestContext { }
+
+@Component
+@SessionScope
+public class UserSession { }
+
+@Component
+@ApplicationScope
+public class AppWideConfig { }
+```
+
+`@RequestScope` et `@SessionScope` sont des raccourcis pour la version `@Scope`
+avec `proxyMode = ScopedProxyMode.TARGET_CLASS`. Il n'y a pas de raccourci pour
+`prototype` ou `websocket` — utilisez `@Scope` pour ceux-là.
+
+Voici l'ensemble complet :
+
+| Scope | Durée de vie | Raccourci |
+| --- | --- | --- |
+| `singleton` | Une instance par conteneur | par défaut |
+| `prototype` | Nouvelle instance à chaque demande | — |
+| `request` | Une instance par requête HTTP | `@RequestScope` |
+| `session` | Une instance par session HTTP | `@SessionScope` |
+| `application` | Une instance par `ServletContext` | `@ApplicationScope` |
+| `websocket` | Une instance par session WebSocket | — |
+
+En bref, les annotations raccourcies sont `@RequestScope`, `@SessionScope` et
+`@ApplicationScope`. Spring Cloud fournit aussi `@RefreshScope` pour
+`@Scope("refresh")`. Il n'y a pas de raccourci pour `singleton` (par défaut),
+`prototype` ou `websocket`.
 
 `@SpringBootApplication` active le scan de composants sur son package, donc
 toute classe annotée y est détectée automatiquement.
