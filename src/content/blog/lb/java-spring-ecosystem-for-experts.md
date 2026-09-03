@@ -253,13 +253,83 @@ De Qualifier ass de Bean-Numm — standardméisseg de Klassennumm mat engem klen
 éischte Buschtaf. Dir kënnt en expliziten Numm mat `@Service("paypal")` oder
 `@Bean("paypal")` setzen.
 
-Beans sinn standardméisseg **Singletons**; freet aner Scopes explizit un.
+Spring bitt méi Bean-Scopes. `singleton` (de Standard) mécht eng Instanz pro
+Container; `prototype` mécht bei all Ufro eng nei Instanz; d'Web-Scopes
+(`request`, `session`, `application`, `websocket`) sinn un e Web-Kontext gebonnen.
 
 ```java
+// singleton (default) — one instance per container
+@Component
+public class SingletonService { }
+
+// prototype — a new instance on every injection
 @Component
 @Scope("prototype")
 public class ShoppingCart { }
+
+// request — one instance per HTTP request
+@Component
+@Scope(value = WebApplicationContext.SCOPE_REQUEST,
+       proxyMode = ScopedProxyMode.TARGET_CLASS)
+public class RequestContext { }
+
+// session — one instance per HTTP session
+@Component
+@Scope(value = WebApplicationContext.SCOPE_SESSION,
+       proxyMode = ScopedProxyMode.TARGET_CLASS)
+public class UserSession { }
+
+// application — one instance per ServletContext
+@Component
+@Scope(value = WebApplicationContext.SCOPE_APPLICATION)
+public class AppWideConfig { }
+
+// websocket — one instance per WebSocket session
+@Component
+@Scope(value = "websocket",
+       proxyMode = ScopedProxyMode.TARGET_CLASS)
+public class ChatSession { }
 ```
+
+Déi kuerzliewend Scopes (`request`, `session`, `websocket`) brauchen
+`proxyMode = ScopedProxyMode.TARGET_CLASS`, fir an méi laang liewend
+Singletons injizéiert ze kënne ginn.
+
+Spring liwwert Kierzel-Annotatiounen fir déi heefeg Web-Scopes:
+
+```java
+@Component
+@RequestScope
+public class RequestContext { }
+
+@Component
+@SessionScope
+public class UserSession { }
+
+@Component
+@ApplicationScope
+public class AppWideConfig { }
+```
+
+`@RequestScope` a `@SessionScope` si Kierzel fir d'`@Scope`-Versioun mat
+`proxyMode = ScopedProxyMode.TARGET_CLASS`. Et gëtt kee Kierzel fir `prototype`
+oder `websocket` — benotzt `@Scope` fir déi.
+
+Hei ass de komplette Set:
+
+| Scope | Liewensdauer | Kierzel |
+| --- | --- | --- |
+| `singleton` | Eng Instanz pro Container | Standard |
+| `prototype` | Nei Instanz bei all Ufro | — |
+| `request` | Eng Instanz pro HTTP-Ufro | `@RequestScope` |
+| `session` | Eng Instanz pro HTTP-Session | `@SessionScope` |
+| `application` | Eng Instanz pro `ServletContext` | `@ApplicationScope` |
+| `websocket` | Eng Instanz pro WebSocket-Session | — |
+
+Kuerz gesot, d'Kierzel-Annotatioune sinn `@RequestScope`, `@SessionScope` an
+`@ApplicationScope`. Spring Cloud liwwert och `@RefreshScope` fir
+`@Scope("refresh")`. Et gëtt kee Kierzel fir `singleton` (de Standard),
+`prototype` oder `websocket`.
 
 `@SpringBootApplication` aktivéiert de Component Scanning iwwer säi Package, sou
 datt all annotéiert Klass do automatesch opgeholl gëtt.

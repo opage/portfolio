@@ -87,6 +87,68 @@ async function nextMessage(): Promise<string> {
 const lines = await Array.fromAsync(stream)
 ```
 
+## Promesses et Observables
+
+### Promesses
+
+Une promesse représente une valeur qui sera disponible plus tard.
+`async`/`await` aplatit les callbacks.
+
+```typescript
+function fetchUser(id: number): Promise<User> {
+  return fetch(`/api/users/${id}`).then((res) => res.json())
+}
+
+async function loadUser(id: number): Promise<User | null> {
+  try {
+    return await fetchUser(id)
+  } catch (error) {
+    console.error('failed to load user', error)
+    return null
+  }
+}
+```
+
+Exécutez des travaux indépendants en parallèle et récupérez les résultats :
+
+```typescript
+const [a, b, c] = await Promise.all([
+  fetchUser(1),
+  fetchUser(2),
+  fetchUser(3),
+])
+```
+
+### Observables
+
+Les Observables (RxJS) modélisent un flux de valeurs dans le temps. Construisez
+des pipelines d'opérateurs et désabonnez-vous toujours.
+
+```typescript
+import { from, fromEvent } from 'rxjs'
+import { debounceTime, filter, map, switchMap } from 'rxjs/operators'
+
+const search$ = fromEvent<InputEvent>(input, 'input').pipe(
+  debounceTime(300),
+  map((event) => (event.target as HTMLInputElement).value),
+  filter((term) => term.length >= 3),
+  switchMap((term) =>
+    from(fetch(`/api/search?q=${term}`).then((res) => res.json())),
+  ),
+)
+
+const subscription = search$.subscribe({
+  next: (results) => console.log(results),
+  error: (err) => console.error(err),
+})
+
+subscription.unsubscribe()
+```
+
+Une promesse produit une valeur ; un observable en produit plusieurs dans le
+temps. Utilisez les promesses pour des résultats uniques, les observables pour
+des événements et des flux.
+
 ## TypeScript : le système de types qui compte
 
 ### `unknown` bat `any`

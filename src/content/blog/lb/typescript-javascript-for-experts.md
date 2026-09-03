@@ -86,6 +86,67 @@ async function nextMessage(): Promise<string> {
 const lines = await Array.fromAsync(stream)
 ```
 
+## Promises an Observables
+
+### Promises
+
+Eng Promise representéiert e Wäert, deen méi spéit verfügbar ass.
+`async`/`await` flaacht d'Callbacken of.
+
+```typescript
+function fetchUser(id: number): Promise<User> {
+  return fetch(`/api/users/${id}`).then((res) => res.json())
+}
+
+async function loadUser(id: number): Promise<User | null> {
+  try {
+    return await fetchUser(id)
+  } catch (error) {
+    console.error('failed to load user', error)
+    return null
+  }
+}
+```
+
+Lausst onofhängeg Aarbecht parallel an sammelt d'Resultater:
+
+```typescript
+const [a, b, c] = await Promise.all([
+  fetchUser(1),
+  fetchUser(2),
+  fetchUser(3),
+])
+```
+
+### Observables
+
+Observables (RxJS) modelléieren e Stroum vu Wäerter iwwer d'Zäit. Baut Pipelines
+aus Operatoren an deabonnéiert Iech ëmmer.
+
+```typescript
+import { from, fromEvent } from 'rxjs'
+import { debounceTime, filter, map, switchMap } from 'rxjs/operators'
+
+const search$ = fromEvent<InputEvent>(input, 'input').pipe(
+  debounceTime(300),
+  map((event) => (event.target as HTMLInputElement).value),
+  filter((term) => term.length >= 3),
+  switchMap((term) =>
+    from(fetch(`/api/search?q=${term}`).then((res) => res.json())),
+  ),
+)
+
+const subscription = search$.subscribe({
+  next: (results) => console.log(results),
+  error: (err) => console.error(err),
+})
+
+subscription.unsubscribe()
+```
+
+Eng Promise produzéiert ee Wäert; en Observable produzéiert méi iwwer d'Zäit.
+Benotzt Promise fir eenzel Resultater, Observables fir Eventer a Stréim.
+
 ## TypeScript: den Typsystem, deen zielt
 
 ### `unknown` schléit `any`
