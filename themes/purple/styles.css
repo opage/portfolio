@@ -1,0 +1,186 @@
+@import "tailwindcss";
+
+@source "../purple";
+@source "../../content";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-brand-50: #faf5ff;
+  --color-brand-100: #f3e8ff;
+  --color-brand-200: #e9d5ff;
+  --color-brand-300: #d9b8f0;
+  --color-brand-400: #c770f0;
+  --color-brand-500: #a24bd1;
+  --color-brand-600: #9333ea;
+  --color-brand-700: #7e22ce;
+  --color-brand-800: #6d28d9;
+  --color-brand-900: #581c87;
+  --color-brand-950: #3b0764;
+
+  --font-sans: 'Outfit', 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'PT Mono', ui-monospace, 'SFMono-Regular', monospace;
+}
+
+:root {
+  --vp-c-brand-1: var(--color-brand-500);
+  --vp-c-brand-2: var(--color-brand-400);
+  --vp-c-brand-3: var(--color-brand-300);
+  --vp-c-bg: #f5f1fb;
+  --vp-c-bg-soft: #ece4f6;
+  --vp-c-bg-alt: #ffffff;
+  --vp-c-text-1: #211d33;
+  --vp-c-text-2: #4a4560;
+  --vp-c-divider: rgba(124, 58, 237, 0.15);
+  --vp-font-family-base: var(--font-sans);
+  --vp-font-family-mono: var(--font-mono);
+}
+
+.dark {
+  --vp-c-brand-1: var(--color-brand-400);
+  --vp-c-brand-2: var(--color-brand-500);
+  --vp-c-brand-3: var(--color-brand-800);
+  --vp-c-bg: #14101e;
+  --vp-c-bg-soft: #1b1629;
+  --vp-c-bg-alt: #201a33;
+  --vp-c-text-1: #ffffff;
+  --vp-c-text-2: #d9d0ea;
+  --vp-c-divider: rgba(199, 112, 240, 0.2);
+}
+
+@layer components {
+  .card {
+    @apply rounded-xl border border-brand-500/15 bg-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-brand-500/10 dark:border-brand-400/20 dark:bg-brand-950/50;
+  }
+
+  .pill {
+    @apply inline-flex items-center gap-1.5 rounded-full border border-brand-400/50 px-3 py-1 text-sm font-medium text-brand-700 transition-colors dark:border-brand-400/30 dark:text-brand-300;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center gap-2 rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-px hover:bg-brand-700 hover:shadow-md hover:shadow-brand-500/25;
+  }
+
+  .icon-btn {
+    @apply inline-flex h-11 w-11 items-center justify-center rounded-full bg-white text-brand-600 shadow-sm transition hover:-translate-y-0.5 hover:bg-brand-600 hover:text-white hover:shadow-lg hover:shadow-brand-500/30 dark:bg-brand-950/60 dark:text-brand-400;
+  }
+
+  .tech-grid {
+    @apply my-4 mb-8 flex flex-wrap gap-2.5;
+  }
+
+  .tech-chip {
+    @apply inline-flex items-center gap-2 rounded-full border border-brand-400/50 px-3.5 py-1.5 text-sm text-brand-700 dark:border-brand-400/30 dark:text-brand-300;
+  }
+
+  .about-image {
+    @apply mx-auto my-6 block w-full max-w-[420px];
+  }
+
+  .accent {
+    @apply font-semibold text-brand-600 dark:text-brand-400;
+  }
+}
+
+.tech-chip img {
+  height: 1.1rem;
+}
+
+/* component headings inside .vp-doc must not inherit the h2 divider */
+.vp-doc h2.company,
+.vp-doc h2.post-title {
+  margin: 0 !important;
+  border-top: none !important;
+  padding-top: 0 !important;
+}
+
+/* the download button must beat VitePress's unlayered `.vp-doc a` styles */
+.vp-doc a.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  background-color: var(--color-brand-600);
+  color: #fff;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+
+.vp-doc a.btn-primary:hover {
+  background-color: var(--color-brand-700);
+  color: #fff;
+  text-decoration: none;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(124, 58, 237, 0.25);
+}
+
+.avatar-image {
+  transition: transform 0.3s;
+}
+
+.avatar-image:hover {
+  transform: perspective(1000px) rotateX(8deg) rotateY(-8deg);
+}
+
+html {
+  transition: background-color 0.3s ease;
+}
+
+body {
+  background-image: linear-gradient(to left, #f5f1fb, #ece4f6);
+  background-attachment: fixed;
+}
+
+.dark body {
+  background-image: linear-gradient(to left, rgb(27 20 41), rgb(20 15 35));
+}
+
+.VPHero .name,
+.VPHero .text {
+  background: linear-gradient(120deg, var(--color-brand-500), var(--color-brand-400));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.dark .VPHero .name,
+.dark .VPHero .text {
+  background: linear-gradient(120deg, var(--color-brand-400), var(--color-brand-500));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.VPDoc h1 {
+  background: linear-gradient(120deg, var(--vp-c-brand-1), var(--vp-c-brand-2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.vp-doc h2 {
+  border-top: 1px solid var(--vp-c-divider);
+  padding-top: 24px;
+}
+
+.mermaid {
+  display: flex;
+  justify-content: center;
+  margin: 1.5rem 0;
+  overflow-x: auto;
+}
+
+.mermaid svg {
+  max-width: 100%;
+  height: auto;
+}
+
+.VPNavBar .translations,
+.VPNavScreen .translations {
+  display: none;
+}
