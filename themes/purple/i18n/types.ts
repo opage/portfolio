@@ -90,6 +90,7 @@ export interface Dictionary {
   }
   resume: {
     download: string
+    open: string
   }
   blog: {
     heading: string

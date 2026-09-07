@@ -282,6 +282,7 @@ export const en: Dictionary = {
   },
   resume: {
     download: 'Download CV',
+    open: 'Open in new tab',
   },
   blog: {
     heading: 'Technical **Blog**',

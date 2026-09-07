@@ -282,6 +282,7 @@ export const fr: Dictionary = {
   },
   resume: {
     download: 'Télécharger le CV',
+    open: 'Ouvrir dans un nouvel onglet',
   },
   blog: {
     heading: '**Blog** technique',

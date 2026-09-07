@@ -282,6 +282,7 @@ export const lb: Dictionary = {
   },
   resume: {
     download: 'Liewenslaf eroflueden',
+    open: 'An engem neien Tab opmaachen',
   },
   blog: {
     heading: 'Techneschen **Blog**',
