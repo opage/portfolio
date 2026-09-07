@@ -98,14 +98,17 @@ const posts = computed<Post[]>(() => {
 
 <template>
   <div class="flex flex-col gap-4">
-    <a v-for="post in posts" :key="post.slug" :href="post.url" class="group card block p-5">
+    <a
+      v-for="post in posts"
+      :key="post.slug"
+      :href="post.url"
+      class="group post-item block rounded-xl border border-brand-500/15 bg-white p-5 shadow-sm dark:border-brand-400/20 dark:bg-brand-950/50"
+    >
       <div class="text-sm text-gray-500 dark:text-gray-400">
         <time>{{ formatDate(post.date) }}</time>
         <span> · {{ post.readingTime }} {{ dict.blog.minutes }}</span>
       </div>
-      <h2
-        class="post-title text-xl font-semibold text-brand-600 transition-colors group-hover:text-brand-400 dark:text-brand-400"
-      >
+      <h2 class="post-title text-xl font-semibold text-brand-600 group-hover:underline dark:text-brand-400">
         {{ post.title }}
       </h2>
       <p class="mt-1 text-gray-600 dark:text-gray-300">{{ post.description }}</p>
@@ -113,8 +116,7 @@ const posts = computed<Post[]>(() => {
         <UiPill v-for="tag in post.tags" :key="tag" size="sm">{{ tag }}</UiPill>
       </p>
       <span class="mt-3 inline-block text-sm font-semibold text-brand-600 dark:text-brand-400">
-        {{ dict.blog.readMore }}
-        <span class="inline-block transition-transform group-hover:translate-x-1">→</span>
+        {{ dict.blog.readMore }} →
       </span>
     </a>
   </div>
