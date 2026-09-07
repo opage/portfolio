@@ -119,6 +119,12 @@
   box-shadow: 0 6px 16px rgba(124, 58, 237, 0.25);
 }
 
+/* blog post card: no underline on the whole card, only the title on hover */
+.vp-doc a.post-item,
+.vp-doc a.post-item:hover {
+  text-decoration: none;
+}
+
 .avatar-image {
   transition: transform 0.3s;
 }
@@ -183,4 +189,16 @@ body {
 .VPNavBar .translations,
 .VPNavScreen .translations {
   display: none;
+}
+
+/* Keep the navigation menu visible while scrolling */
+@media (max-width: 959px) {
+  .VPNav {
+    position: sticky !important;
+    top: 0 !important;
+  }
+
+  .VPNavBar {
+    background-color: var(--vp-c-bg) !important;
+  }
 }
