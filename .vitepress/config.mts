@@ -25,7 +25,7 @@ function detectLang(rel: string): string {
 }
 
 function resolvePlaceholders(md: any) {
-  md.core.ruler.before('inline', 'resolve-placeholders', (state: any) => {
+  md.core.ruler.before('normalize', 'resolve-placeholders', (state: any) => {
     const rel: string = state.env.relativePath || ''
     const lang = detectLang(rel)
     const blogMatch = /^blog\/(?:en|fr|lb)\/([\w-]+)\.md$/.exec(rel)
@@ -34,14 +34,7 @@ function resolvePlaceholders(md: any) {
     const resolve = (key: string): string =>
       blogTr ? blogTr[key]?.[lang] ?? '' : (pageTranslations as Record<string, any>)[key]?.[lang] ?? ''
 
-    const replace = (text: string): string =>
-      text.replace(/\[\[([\w-]+)\]\]/g, (_, key: string) => resolve(key))
-
-    for (const token of state.tokens) {
-      if (token.type === 'inline' || token.type === 'html_block' || token.type === 'html_inline') {
-        token.content = replace(token.content)
-      }
-    }
+    state.src = state.src.replace(/\[\[([\w-]+)\]\]/g, (_: string, key: string) => resolve(key))
   })
 }
 
