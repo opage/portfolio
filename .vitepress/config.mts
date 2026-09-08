@@ -139,7 +139,9 @@ const config = withMermaid(
     },
   },
   transformHead() {
+    const base = (process.env.BASE_PATH || '/').replace(/\/?$/, '/')
     return [
+      ['link', { rel: 'icon', href: `${base}images/favicon.ico` }],
       [
         'meta',
         {
