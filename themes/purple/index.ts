@@ -5,6 +5,8 @@ import SocialLinks from './components/SocialLinks.vue'
 import ProjectGrid from './components/ProjectGrid.vue'
 import ExperienceTimeline from './components/ExperienceTimeline.vue'
 import IntroSection from './components/IntroSection.vue'
+import TechChips from './components/TechChips.vue'
+import Typewriter from './components/Typewriter.vue'
 import ResumePdf from './components/ResumePdf.vue'
 import UiPill from './components/ui/UiPill.vue'
 import './styles.css'
@@ -18,6 +20,8 @@ export default {
     app.component('ProjectGrid', ProjectGrid)
     app.component('ExperienceTimeline', ExperienceTimeline)
     app.component('IntroSection', IntroSection)
+    app.component('TechChips', TechChips)
+    app.component('Typewriter', Typewriter)
     app.component('ResumePdf', ResumePdf)
     app.component('UiPill', UiPill)
   },

@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useData } from 'vitepress'
+import { useData, useRoute } from 'vitepress'
 
-const { lang, page } = useData()
+const { lang } = useData()
+const route = useRoute()
 
 const locales = [
   { code: 'en', label: 'EN' },
@@ -10,27 +11,22 @@ const locales = [
   { code: 'lb', label: 'LB' },
 ]
 
-const activeLang = computed(() => {
-  const match = /^(?:blog|about|experience|projects|resume)\/(en|fr|lb)\//.exec(page.value.relativePath || '')
-  return match ? match[1] : lang.value || 'en'
-})
+const activeLang = computed(() => lang.value || 'en')
 
 function toLocaleLink(code: string): string {
-  const rel = (page.value.relativePath || '').replace(/\.md$/, '')
+  const path = route.path
 
-  const m = /^(blog|about|experience|projects|resume)\/(en|fr|lb)(.*)$/.exec(rel)
-  if (m) {
-    const rest = m[3].replace(/\/index$/, '')
-    const trailing = m[3].endsWith('/index') || m[3] === '' ? '/' : ''
-    return `/${m[1]}/${code}${rest}${trailing}`
+  const blog = /^\/blog\/(?:en|fr|lb)(\/.*)?$/.exec(path)
+  if (blog) {
+    return `/blog/${code}${blog[1] ?? ''}`
   }
 
-  let path = rel.replace(/^(en|fr|lb)\//, '')
-  if (path === 'index') path = ''
-  else if (path.endsWith('/index')) path = path.slice(0, -'/index'.length)
+  const section = /^\/(about|experience|projects|resume)\//.exec(path)
+  if (section) {
+    return `/${section[1]}/${code}/`
+  }
 
-  if (code === 'en') return path ? `/${path}` : '/'
-  return path ? `/${code}/${path}` : `/${code}/`
+  return code === 'en' ? '/' : `/${code}/`
 }
 </script>
 

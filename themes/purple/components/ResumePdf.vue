@@ -3,14 +3,12 @@ import { computed } from 'vue'
 import { withBase } from 'vitepress'
 import { useDict } from '../dict'
 
-const props = defineProps<{ pdf: string; label: string }>()
-
 const dict = useDict()
-const pdfUrl = computed(() => withBase(props.pdf))
+const pdfUrl = computed(() => withBase(dict.value.resume.pdf))
 </script>
 
 <template>
-  <a class="btn-primary mb-4" :href="pdfUrl" download>{{ props.label }}</a>
+  <a class="btn-primary mb-4" :href="pdfUrl" download>{{ dict.resume.download }}</a>
 
   <iframe
     :src="pdfUrl + '#toolbar=0'"

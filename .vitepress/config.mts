@@ -1,6 +1,49 @@
 import { defineConfig } from 'vitepress'
 import tailwindcss from '@tailwindcss/vite'
 import { withMermaid } from 'vitepress-plugin-mermaid'
+import { en } from '../themes/purple/i18n/en'
+import { fr } from '../themes/purple/i18n/fr'
+import { lb } from '../themes/purple/i18n/lb'
+import type { Dictionary } from '../themes/purple/i18n/types'
+import { pageTranslations } from '../themes/purple/translations'
+import { bodyTranslations } from '../themes/purple/blog-data/translations'
+import { posts } from '../themes/purple/blog-data/posts'
+
+const dicts: Record<string, Dictionary> = { en, fr, lb }
+
+const sectionTitles = {
+  about: (d: Dictionary) => d.nav.about,
+  experience: (d: Dictionary) => d.nav.experience,
+  projects: (d: Dictionary) => d.nav.projects,
+  resume: (d: Dictionary) => d.nav.resume,
+}
+
+function detectLang(rel: string): string {
+  if (rel.startsWith('lb/') || rel.includes('/lb/')) return 'lb'
+  if (rel.startsWith('fr/') || rel.includes('/fr/')) return 'fr'
+  return 'en'
+}
+
+function resolvePlaceholders(md: any) {
+  md.core.ruler.before('inline', 'resolve-placeholders', (state: any) => {
+    const rel: string = state.env.relativePath || ''
+    const lang = detectLang(rel)
+    const blogMatch = /^blog\/(?:en|fr|lb)\/([\w-]+)\.md$/.exec(rel)
+    const blogTr = blogMatch ? (bodyTranslations as Record<string, any>)[blogMatch[1]] : undefined
+
+    const resolve = (key: string): string =>
+      blogTr ? blogTr[key]?.[lang] ?? '' : (pageTranslations as Record<string, any>)[key]?.[lang] ?? ''
+
+    const replace = (text: string): string =>
+      text.replace(/\[\[([\w-]+)\]\]/g, (_, key: string) => resolve(key))
+
+    for (const token of state.tokens) {
+      if (token.type === 'inline' || token.type === 'html_block' || token.type === 'html_inline') {
+        token.content = replace(token.content)
+      }
+    }
+  })
+}
 
 const nav = [
   { text: 'Home', link: '/' },
@@ -15,6 +58,7 @@ const config = withMermaid(
   defineConfig({
   base: (process.env.BASE_PATH || '/').replace(/\/?$/, '/'),
   srcDir: 'content',
+  srcExclude: ['**/template.md', '**/templates/**'],
   rewrites: {
     'home/en/index.md': 'index.md',
     'home/fr/index.md': 'fr/index.md',
@@ -81,6 +125,9 @@ const config = withMermaid(
   },
   markdown: {
     lineNumbers: true,
+    config(md) {
+      resolvePlaceholders(md)
+    },
   },
   mermaid: {
     theme: 'default',
@@ -110,6 +157,25 @@ const config = withMermaid(
       ],
       ['meta', { name: 'referrer', content: 'strict-origin-when-cross-origin' }],
     ]
+  },
+  transformPageData(pageData) {
+    const rel = pageData.relativePath || ''
+    const lang = detectLang(rel)
+
+    const blogMatch = /^blog\/(?:en|fr|lb)\/([\w-]+)\.md$/.exec(rel)
+    if (blogMatch) {
+      const post = posts.find((p) => p.slug === blogMatch[1])
+      if (post) {
+        pageData.title = post.title[lang] ?? post.slug
+        pageData.description = post.description[lang] ?? ''
+      }
+      return
+    }
+
+    const section = /^(about|experience|projects|resume)\//.exec(rel)?.[1]
+    if (section && sectionTitles[section as keyof typeof sectionTitles]) {
+      pageData.title = sectionTitles[section as keyof typeof sectionTitles](dicts[lang])
+    }
   },
   }),
 )

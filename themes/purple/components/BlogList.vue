@@ -2,6 +2,9 @@
 import { computed } from 'vue'
 import { useData } from 'vitepress'
 import { getDict } from '../dict'
+import { rich } from '../rich'
+import { posts as postMetas } from '../blog-data/posts'
+import { bodyTranslations } from '../blog-data/translations'
 import UiPill from './ui/UiPill.vue'
 
 const { page } = useData()
@@ -21,32 +24,6 @@ interface Post {
   tags: string[]
   readingTime: number
   url: string
-}
-
-const modules = import.meta.glob('../../../content/blog/{en,fr,lb}/*.md', {
-  query: '?raw',
-  import: 'default',
-  eager: true,
-}) as Record<string, string>
-
-function parseFrontmatter(md: string): Record<string, unknown> {
-  const match = /^---\r?\n([\s\S]*?)\r?\n---/.exec(md)
-  const data: Record<string, unknown> = {}
-  if (!match) return data
-  for (const line of match[1].split(/\r?\n/)) {
-    const kv = /^([A-Za-z0-9_-]+):[ \t]*(.*)$/.exec(line)
-    if (!kv) continue
-    const value = kv[2].trim()
-    if (value.startsWith('[') && value.endsWith(']')) {
-      data[kv[1]] = value
-        .slice(1, -1)
-        .split(',')
-        .map((s) => s.trim().replace(/^["']|["']$/g, ''))
-    } else {
-      data[kv[1]] = value.replace(/^["']|["']$/g, '')
-    }
-  }
-  return data
 }
 
 function readingTime(md: string): number {
@@ -71,33 +48,30 @@ function formatDate(date: string): string {
 
 const posts = computed<Post[]>(() => {
   const locale = blogLang.value
-  const dir = `blog/${locale}`
   const prefix = `/blog/${locale}/`
-  const result: Post[] = []
-
-  for (const [path, md] of Object.entries(modules)) {
-    const normalized = path.replace(/\\/g, '/')
-    if (!normalized.includes(`/${dir}/`)) continue
-    const slug = normalized.split('/').pop()!.replace(/\.md$/, '')
-    if (slug === 'index') continue
-    const fm = parseFrontmatter(md)
-    result.push({
-      slug,
-      title: String(fm.title ?? slug),
-      date: String(fm.date ?? ''),
-      description: String(fm.description ?? ''),
-      tags: Array.isArray(fm.tags) ? (fm.tags as string[]) : [],
-      readingTime: readingTime(md),
-      url: `${prefix}${slug}`,
-    })
-  }
-
-  return result.sort((a, b) => b.date.localeCompare(a.date))
+  return postMetas
+    .map((meta) => ({
+      slug: meta.slug,
+      title: meta.title[locale] ?? meta.slug,
+      date: meta.date,
+      description: meta.description[locale] ?? '',
+      tags: meta.tags,
+      readingTime: readingTime(
+        Object.values(bodyTranslations[meta.slug] ?? {})
+          .map((t) => t.en ?? '')
+          .join('\n'),
+      ),
+      url: `${prefix}${meta.slug}`,
+    }))
+    .sort((a, b) => b.date.localeCompare(a.date))
 })
 </script>
 
 <template>
-  <div class="flex flex-col gap-4">
+  <div>
+    <h1 v-html="rich(dict.blog.heading)" />
+    <p class="mt-1 text-gray-600 dark:text-gray-400">{{ dict.blog.subtitle }}</p>
+    <div class="mt-6 flex flex-col gap-4">
     <a
       v-for="post in posts"
       :key="post.slug"
@@ -119,5 +93,6 @@ const posts = computed<Post[]>(() => {
         {{ dict.blog.readMore }} →
       </span>
     </a>
+    </div>
   </div>
 </template>

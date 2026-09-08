@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue'
-import { useDict } from '../dict'
+import { useLocale } from '../locale'
+import { experienceData } from '../experience-data'
 
-const dict = useDict()
+const { locale } = useLocale()
 const open = ref<number[]>([0, 1, 2])
 
 function toggle(i: number) {
@@ -29,9 +30,7 @@ function slugify(name: string) {
 function expandFromHash() {
   const hash = window.location.hash.replace(/^#/, '')
   if (!hash) return
-  const index = dict.value.experience.items.findIndex(
-    (job) => slugify(job.company) === hash,
-  )
+  const index = experienceData.items.findIndex((job) => slugify(job.company) === hash)
   if (index >= 0 && !open.value.includes(index)) {
     open.value = [...open.value, index]
   }
@@ -50,7 +49,7 @@ onUnmounted(() => {
 <template>
   <div class="my-6 mb-8">
     <div
-      v-for="(job, i) in dict.experience.items"
+      v-for="(job, i) in experienceData.items"
       :key="i"
       class="relative border-l-2 border-brand-400/60 pb-2 pl-6"
     >
@@ -77,9 +76,9 @@ onUnmounted(() => {
             @click="toggle(i)"
           >
             <span class="flex flex-col gap-0.5">
-              <span class="text-lg font-semibold text-gray-900 dark:text-white">{{ job.role }}</span>
+              <span class="text-lg font-semibold text-gray-900 dark:text-white">{{ job.role[locale] }}</span>
               <span class="text-sm text-gray-500 dark:text-gray-400">
-                {{ job.location }} · {{ job.period }} · {{ job.duration }}
+                {{ job.location }} · {{ job.period[locale] }} · {{ job.duration[locale] }}
               </span>
             </span>
             <span
@@ -90,9 +89,9 @@ onUnmounted(() => {
             </span>
           </button>
           <div v-if="open.includes(i)" class="mt-3">
-            <p class="text-sm italic text-gray-600 dark:text-gray-300">{{ job.summary }}</p>
+            <p class="text-sm italic text-gray-600 dark:text-gray-300">{{ job.summary[locale] }}</p>
             <ul class="mt-2 list-disc pl-5 text-sm text-gray-700 dark:text-gray-200">
-              <li v-for="h in job.highlights" :key="h" class="my-1">{{ h }}</li>
+              <li v-for="h in job.highlights[locale]" :key="h" class="my-1">{{ h }}</li>
             </ul>
           </div>
         </div>
