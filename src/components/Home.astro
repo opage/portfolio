@@ -1,8 +1,8 @@
 ---
 import Layout from '../layouts/Layout.astro'
 import IntroSection from './IntroSection.astro'
-import Typewriter from './Typewriter.vue'
-import { pageTranslations } from '../../themes/purple/translations'
+import Typewriter from './Typewriter.astro'
+import { pageTranslations } from '../data'
 import { withBase } from '../utils/base'
 import type { Locale } from '../utils/i18n'
 
@@ -22,7 +22,7 @@ const t = (key: string): string =>
         <div class="flex-1 text-center md:text-left">
           <h1 class="home-name hero-fade-up">{t('home-name')}</h1>
           <p class="home-role hero-fade-up delay-1 mt-2 text-xl font-semibold">
-            <Typewriter lang={lang} client:load />
+            <Typewriter lang={lang} />
           </p>
           <div class="hero-fade-up delay-2 mt-6 flex flex-wrap justify-center gap-3 md:justify-start">
             <a class="btn-primary" href={withBase(t('home-about-link'))}>{t('home-about-action')} →</a>

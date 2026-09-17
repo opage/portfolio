@@ -1,0 +1,77 @@
+---
+import { homeData } from '../data'
+import { normalizeLang } from '../utils/i18n'
+
+interface Props {
+  lang: string
+}
+
+const locale = normalizeLang(Astro.props.lang)
+const words = homeData.roles[locale] ?? []
+---
+
+<span class="typewriter"><span data-typewriter data-words={JSON.stringify(words)}>{words[0] ?? ''}</span><span class="typewriter-cursor">|</span></span>
+
+<script>
+  // Vanilla-JS typewriter island: types each word, pauses, deletes it, and
+  // moves to the next one. Honors prefers-reduced-motion (static text).
+  function initTypewriter(el: HTMLElement): void {
+    let words: string[] = []
+    try {
+      words = JSON.parse(el.dataset.words ?? '[]') as string[]
+    } catch {
+      words = []
+    }
+    if (words.length === 0) return
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      el.textContent = words[0] ?? ''
+      return
+    }
+
+    let text = words[0] ?? ''
+    let wordIndex = 0
+    let deleting = true
+    let timer: ReturnType<typeof setTimeout> | undefined
+
+    const schedule = (delay: number): void => {
+      if (timer) clearTimeout(timer)
+      timer = setTimeout(type, delay)
+    }
+    const render = (): void => {
+      el.textContent = text
+    }
+
+    function type(): void {
+      const word = words[wordIndex] ?? ''
+      if (!deleting) {
+        text = word.slice(0, text.length + 1)
+        if (text.length >= word.length) {
+          deleting = true
+          render()
+          schedule(1600)
+        } else {
+          render()
+          schedule(80)
+        }
+      } else {
+        text = word.slice(0, text.length - 1)
+        if (text.length === 0) {
+          deleting = false
+          wordIndex = (wordIndex + 1) % words.length
+          render()
+          schedule(250)
+        } else {
+          render()
+          schedule(40)
+        }
+      }
+    }
+
+    render()
+    schedule(2000)
+  }
+
+  for (const el of document.querySelectorAll<HTMLElement>('[data-typewriter]')) {
+    initTypewriter(el)
+  }
+</script>

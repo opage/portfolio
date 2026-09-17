@@ -15,7 +15,7 @@ const pdfUrl = withBase(dict.resume.pdf)
 <a class="btn-primary mb-4" href={pdfUrl} download>{dict.resume.download}</a>
 
 <iframe
-  src={`${pdfUrl}#toolbar=0`}
+  src={`${pdfUrl}#toolbar=0&view=FitH`}
   class="block h-[70vh] min-h-[320px] w-full rounded-lg border border-brand-400/60 md:h-[800px]"
   title={dict.resume.download}
 ></iframe>

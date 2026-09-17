@@ -1,0 +1,95 @@
+---
+import { experienceData } from '../data'
+import { normalizeLang } from '../utils/i18n'
+
+interface Props {
+  lang: string
+}
+
+const locale = normalizeLang(Astro.props.lang)
+
+function initials(name: string): string {
+  const parts = name
+    .split(/\s+/)
+    .filter((w) => /[A-Za-z0-9]/.test(w))
+    .map((w) => w.match(/[A-Za-z0-9]/)?.[0]?.toUpperCase() ?? '')
+  return parts.slice(0, 2).join('') || '?'
+}
+
+function slugify(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+}
+---
+
+<div class="my-6 mb-8" data-timeline>
+  {
+    experienceData.items.map((job, i) => (
+      <div class="relative border-l-2 border-brand-400/60 pb-2 pl-6" data-item>
+        <span class="absolute -left-[9px] top-3 h-4 w-4 rounded-full border-2 border-brand-400 bg-surface dark:bg-brand-950" />
+        <div class="flex gap-3">
+          <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-brand-400/60 bg-brand-300/60 text-sm font-bold text-brand-900 dark:bg-brand-800/60 dark:text-fg">
+            {initials(job.company)}
+          </span>
+          <div class="min-w-0 flex-1 pb-6">
+            <h2 class="company text-base font-semibold text-brand-600 dark:text-brand-400" id={slugify(job.company)}>
+              {job.company}
+            </h2>
+            <button
+              type="button"
+              class="flex w-full items-start justify-between gap-2 border-0 bg-transparent p-0 text-left"
+              aria-expanded="true"
+              data-toggle
+            >
+              <span class="flex flex-col gap-0.5">
+                <span class="text-lg font-semibold text-gray-900 dark:text-fg">{job.role[locale]}</span>
+                <span class="text-sm text-gray-500 dark:text-gray-400">
+                  {job.location} · {job.period[locale]} · {job.duration[locale]}
+                </span>
+              </span>
+              <span class="shrink-0 text-gray-400 transition-transform" data-chevron>
+                ▾
+              </span>
+            </button>
+            <div class="mt-3" data-panel>
+              <p class="text-sm italic text-gray-600 dark:text-gray-300">{job.summary[locale]}</p>
+              <ul class="mt-2 list-disc pl-5 text-sm text-gray-700 dark:text-gray-200">
+                {job.highlights[locale].map((h) => (
+                  <li class="my-1">{h}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    ))
+  }
+</div>
+
+<script>
+  // Vanilla-JS accordion island: every entry renders expanded (also without
+  // JS); clicking a header collapses/expands its panel. A #company-slug hash
+  // in the URL scrolls straight to that entry.
+  for (const root of document.querySelectorAll('[data-timeline]')) {
+    for (const item of root.querySelectorAll('[data-item]')) {
+      const toggle = item.querySelector<HTMLButtonElement>('[data-toggle]')
+      const panel = item.querySelector<HTMLElement>('[data-panel]')
+      const chevron = item.querySelector<HTMLElement>('[data-chevron]')
+      if (!toggle || !panel) continue
+      toggle.addEventListener('click', () => {
+        const open = toggle.getAttribute('aria-expanded') !== 'true'
+        toggle.setAttribute('aria-expanded', String(open))
+        panel.classList.toggle('hidden', !open)
+        chevron?.classList.toggle('rotate-180', !open)
+      })
+    }
+  }
+
+  const hash = window.location.hash.replace(/^#/, '')
+  if (hash) {
+    const target = document.getElementById(hash)
+    target?.scrollIntoView()
+  }
+</script>

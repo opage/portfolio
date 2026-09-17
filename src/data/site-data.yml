@@ -1,0 +1,84 @@
+descriptions:
+  en: Portfolio of Olivier Page — Full-stack Developer
+  fr: Portfolio d’Olivier Page — Développeur Full-stack
+  lb: Portfolio vum Olivier Page — Full-stack Entwéckler
+nav:
+  en:
+    - text: Home
+      link: /
+    - text: About
+      link: /about/en/
+    - text: Experience
+      link: /experience/en/
+    - text: Projects
+      link: /projects/en/
+    - text: Resume
+      link: /resume/en/
+    - text: Blog
+      link: /blog/en/
+  fr:
+    - text: Accueil
+      link: /fr/
+    - text: À propos
+      link: /about/fr/
+    - text: Expérience
+      link: /experience/fr/
+    - text: Projets
+      link: /projects/fr/
+    - text: CV
+      link: /resume/fr/
+    - text: Blog
+      link: /blog/fr/
+  lb:
+    - text: Doheem
+      link: /lb/
+    - text: Iwwer mech
+      link: /about/lb/
+    - text: Erfarung
+      link: /experience/lb/
+    - text: Projeten
+      link: /projects/lb/
+    - text: Liewenslaf
+      link: /resume/lb/
+    - text: Blog
+      link: /blog/lb/
+footer:
+  en:
+    message: Designed and Developed by Olivier Page
+    copyright: Copyright © 2026 OP
+  fr:
+    message: Conçu et développé par Olivier Page
+    copyright: Copyright © 2026 OP
+  lb:
+    message: Designt an entwéckelt vum Olivier Page
+    copyright: Copyright © 2026 OP
+resume:
+  en:
+    pdf: /Olivier_Page_CV_EN.pdf
+    download: Download CV
+    open: Open in new tab
+  fr:
+    pdf: /Olivier_Page_CV_FR.pdf
+    download: Télécharger le CV
+    open: Ouvrir dans un nouvel onglet
+  lb:
+    pdf: /Olivier_Page_CV_EN.pdf
+    download: Liewenslaf eroflueden
+    open: An engem neien Tab opmaachen
+blog:
+  en:
+    heading: Technical **Blog**
+    subtitle: Notes and deep dives on software engineering.
+    readMore: Read more
+    minutes: min read
+  fr:
+    heading: "**Blog** technique"
+    subtitle: Notes et articles de fond sur l'ingénierie logicielle.
+    readMore: Lire la suite
+    minutes: min de lecture
+  lb:
+    heading: Techneschen **Blog**
+    subtitle: Notizen an déif Ablécker iwwer Software-Engineering.
+    readMore: Weiderliesen
+    minutes: Min. Lieszäit
+
