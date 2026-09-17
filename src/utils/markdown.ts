@@ -4,7 +4,7 @@ import {
 } from '@astrojs/markdown-remark'
 import rehypeMermaid from 'rehype-mermaid'
 import remarkGfm from 'remark-gfm'
-import { bodyTranslations } from '../../themes/purple/blog-data/translations'
+import { bodyTranslations } from '../data'
 import type { Locale } from './i18n'
 
 // Blog markdown is rendered with Astro's Markdown plugin

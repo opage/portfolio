@@ -1,0 +1,14 @@
+---
+import Home from '../components/Home.astro'
+import { normalizeLang } from '../utils/i18n'
+
+export function getStaticPaths() {
+  // `lang: undefined` renders `/`; the rest renders `/fr/` and `/lb/`.
+  return [{ params: { lang: undefined } }, { params: { lang: 'fr' } }, { params: { lang: 'lb' } }]
+}
+
+const { lang: langParam } = Astro.params
+const lang = normalizeLang(langParam)
+---
+
+<Home lang={lang} />

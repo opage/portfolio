@@ -1,14 +1,15 @@
-import { en } from '../../themes/purple/i18n/en'
-import { fr } from '../../themes/purple/i18n/fr'
-import { lb } from '../../themes/purple/i18n/lb'
-import type { Dictionary } from '../../themes/purple/i18n/types'
+import { siteData } from '../data'
+import type { Dictionary } from '../data/types'
 
 export type Locale = 'en' | 'fr' | 'lb'
 
-const dicts: Record<Locale, Dictionary> = { en, fr, lb }
-
 export function getDict(lang: string): Dictionary {
-  return dicts[lang as Locale] ?? en
+  const locale = normalizeLang(lang)
+  return {
+    nav: siteData.nav[locale],
+    resume: siteData.resume[locale],
+    blog: siteData.blog[locale],
+  }
 }
 
 export function normalizeLang(lang: string | undefined): Locale {

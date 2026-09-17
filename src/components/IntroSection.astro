@@ -1,6 +1,6 @@
 ---
-import { homeData } from '../../themes/purple/home-data'
-import { rich } from '../../themes/purple/rich'
+import { homeData } from '../data'
+import { rich } from '../data/rich'
 import { withBase } from '../utils/base'
 import { normalizeLang } from '../utils/i18n'
 import SocialLinks from './SocialLinks.astro'
@@ -17,7 +17,7 @@ const locale = normalizeLang(langProp)
   <div class="min-w-0 flex-1">
     <h2 class="mt-0" set:html={rich(homeData.intro.heading[locale])} />
     {homeData.intro.body[locale].map((paragraph) => <p set:html={rich(paragraph)} />)}
-    <SocialLinks />
+    <SocialLinks lang={locale} />
   </div>
   <img
     class="avatar-image h-[200px] w-[200px] shrink-0"

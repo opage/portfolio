@@ -1,7 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro'
-import ExperienceTimeline from '../../components/ExperienceTimeline.vue'
-import { experienceData } from '../../../themes/purple/experience-data'
+import ExperienceTimeline from '../../components/ExperienceTimeline.astro'
+import { experienceData } from '../../data'
 import { getDict, normalizeLang } from '../../utils/i18n'
 import { renderInline } from '../../utils/markdown'
 
@@ -21,6 +21,6 @@ const heading = await renderInline(experienceData.heading[lang])
 
     <p>{experienceData.subtitle[lang]}</p>
 
-    <ExperienceTimeline lang={lang} client:load />
+    <ExperienceTimeline lang={lang} />
   </div>
 </Layout>
