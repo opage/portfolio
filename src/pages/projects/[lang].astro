@@ -1,0 +1,26 @@
+---
+import Layout from '../../layouts/Layout.astro'
+import ProjectGrid from '../../components/ProjectGrid.astro'
+import { projectsData } from '../../../themes/purple/projects-data'
+import { getDict, normalizeLang } from '../../utils/i18n'
+import { renderInline } from '../../utils/markdown'
+
+export function getStaticPaths() {
+  return [{ params: { lang: 'en' } }, { params: { lang: 'fr' } }, { params: { lang: 'lb' } }]
+}
+
+const { lang: langParam } = Astro.params
+const lang = normalizeLang(langParam)
+const dict = getDict(lang)
+const heading = await renderInline(projectsData.heading[lang])
+---
+
+<Layout title={dict.nav.projects} lang={lang} currentPath={Astro.url.pathname}>
+  <div class="vp-doc">
+    <h1 set:html={heading} />
+
+    <p>{projectsData.subtitle[lang]}</p>
+
+    <ProjectGrid lang={lang} />
+  </div>
+</Layout>

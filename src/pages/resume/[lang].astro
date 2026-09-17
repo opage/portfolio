@@ -1,0 +1,21 @@
+---
+import Layout from '../../layouts/Layout.astro'
+import ResumePdf from '../../components/ResumePdf.astro'
+import { getDict, normalizeLang } from '../../utils/i18n'
+
+export function getStaticPaths() {
+  return [{ params: { lang: 'en' } }, { params: { lang: 'fr' } }, { params: { lang: 'lb' } }]
+}
+
+const { lang: langParam } = Astro.params
+const lang = normalizeLang(langParam)
+const dict = getDict(lang)
+---
+
+<Layout title={dict.nav.resume} lang={lang} currentPath={Astro.url.pathname}>
+  <div class="vp-doc">
+    <h1>{dict.nav.resume}</h1>
+
+    <ResumePdf lang={lang} />
+  </div>
+</Layout>

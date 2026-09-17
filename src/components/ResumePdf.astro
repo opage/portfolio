@@ -1,0 +1,32 @@
+---
+import { getDict, normalizeLang } from '../utils/i18n'
+import { withBase } from '../utils/base'
+
+interface Props {
+  lang: string
+}
+
+const { lang: langProp } = Astro.props
+const locale = normalizeLang(langProp)
+const dict = getDict(locale)
+const pdfUrl = withBase(dict.resume.pdf)
+---
+
+<a class="btn-primary mb-4" href={pdfUrl} download>{dict.resume.download}</a>
+
+<iframe
+  src={`${pdfUrl}#toolbar=0`}
+  class="block h-[70vh] min-h-[320px] w-full rounded-lg border border-brand-400/60 md:h-[800px]"
+  title={dict.resume.download}
+></iframe>
+
+<p class="mt-3 text-center text-sm text-gray-600 dark:text-gray-300">
+  <a
+    href={pdfUrl}
+    target="_blank"
+    rel="noopener"
+    class="font-semibold text-brand-600 hover:underline dark:text-brand-400"
+  >
+    {dict.resume.open}
+  </a>
+</p>

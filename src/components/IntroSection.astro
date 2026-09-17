@@ -1,0 +1,27 @@
+---
+import { homeData } from '../../themes/purple/home-data'
+import { rich } from '../../themes/purple/rich'
+import { withBase } from '../utils/base'
+import { normalizeLang } from '../utils/i18n'
+import SocialLinks from './SocialLinks.astro'
+
+interface Props {
+  lang: string
+}
+
+const { lang: langProp } = Astro.props
+const locale = normalizeLang(langProp)
+---
+
+<div class="my-8 flex items-center gap-10 max-sm:flex-col">
+  <div class="min-w-0 flex-1">
+    <h2 class="mt-0" set:html={rich(homeData.intro.heading[locale])} />
+    {homeData.intro.body[locale].map((paragraph) => <p set:html={rich(paragraph)} />)}
+    <SocialLinks />
+  </div>
+  <img
+    class="avatar-image h-[200px] w-[200px] shrink-0"
+    src={withBase('/images/avatar.svg')}
+    alt={homeData.intro.avatarAlt[locale]}
+  />
+</div>

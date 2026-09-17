@@ -1,0 +1,128 @@
+---
+// Client-side Mermaid renderer for fenced ```mermaid blocks.
+// Finds fenced ```mermaid blocks rendered as <pre class="mermaid"> and
+// renders them to SVG. Re-renders on dark-mode toggles with the matching theme.
+//
+// The `mermaid` library (~2 MB) is loaded lazily via dynamic import so it is
+// code-split into its own chunk and only downloaded on pages that actually
+// contain diagrams.
+---
+
+<script>
+  const SELECTOR = 'pre.mermaid'
+
+  // Cached lazy load of the heavy mermaid library.
+  let mermaidPromise: Promise<typeof import('mermaid').default> | undefined
+  function loadMermaid(): Promise<typeof import('mermaid').default> {
+    if (!mermaidPromise) {
+      mermaidPromise = import('mermaid').then((mod) => mod.default)
+    }
+    return mermaidPromise
+  }
+
+  function isDark(): boolean {
+    return document.documentElement.getAttribute('data-theme') === 'dark'
+  }
+
+  // High-contrast variables for the graphite dark theme. Mermaid's built-in
+  // dark theme leaves edge labels and secondary text near-unreadable on it.
+  const darkThemeVariables = {
+    background: '#15140f',
+    primaryColor: '#2b2721',
+    primaryBorderColor: '#e2966a',
+    primaryTextColor: '#ece9e2',
+    secondaryColor: '#221f18',
+    tertiaryColor: '#211e18',
+    lineColor: '#b3aa99',
+    textColor: '#ece9e2',
+    mainBkg: '#2b2721',
+    nodeBkg: '#2b2721',
+    nodeBorder: '#e2966a',
+    clusterBkg: '#1c1a15',
+    clusterBorder: '#837b6d',
+    edgeLabelBackground: '#2b2721',
+    actorBkg: '#2b2721',
+    actorBorder: '#e2966a',
+    actorTextColor: '#ece9e2',
+    signalColor: '#ece9e2',
+    signalTextColor: '#ece9e2',
+    labelBoxBkgColor: '#2b2721',
+    labelBoxBorderColor: '#e2966a',
+    labelTextColor: '#ece9e2',
+    loopTextColor: '#ece9e2',
+    activationBkgColor: '#3a342a',
+    sequenceNumberColor: '#1c130d',
+  }
+
+  function initMermaid(mermaid: MermaidApi): void {
+    const dark = isDark()
+    mermaid.initialize({
+      startOnLoad: false,
+      securityLevel: 'loose',
+      fontFamily: 'inherit',
+      theme: dark ? 'dark' : 'default',
+      themeVariables: dark ? darkThemeVariables : undefined,
+    })
+  }
+
+  type MermaidApi = Pick<typeof import('mermaid').default, 'initialize' | 'render'>
+
+  async function renderAll(): Promise<void> {
+    const blocks = Array.from(document.querySelectorAll(SELECTOR))
+    if (blocks.length === 0) return
+    const mermaid: MermaidApi = await loadMermaid()
+    initMermaid(mermaid)
+    // Render sequentially: parallel mermaid.render calls share global state
+    // and intermittently fail on complex diagrams (e.g. sequence).
+    for (let index = 0; index < blocks.length; index++) {
+      const pre = blocks[index]
+      // rehype-mermaid (`pre-mermaid` strategy) emits the raw diagram
+      // source as the text content of <pre class="mermaid"> (no <code> child).
+      const source = pre.getAttribute('data-source') ?? pre.textContent ?? ''
+      if (!source.trim()) continue
+      // Remember the source so a theme toggle can re-render from scratch.
+      pre.setAttribute('data-source', source)
+      const id = `mermaid-diagram-${index}`
+      try {
+        const { svg } = await mermaid.render(id, source)
+        const wrapper = document.createElement('div')
+        wrapper.className = 'mermaid'
+        wrapper.innerHTML = svg
+        pre.replaceWith(wrapper)
+        // Keep the source on the rendered node for re-renders.
+        wrapper.setAttribute('data-source', source)
+        wrapper.setAttribute('data-mermaid-index', String(index))
+      } catch (err) {
+        // Leave the code block readable if the diagram is invalid,
+        // but surface the failure so broken diagrams don't go unnoticed.
+        console.error(`[mermaid] failed to render diagram #${index}:`, err)
+      }
+    }
+  }
+
+  async function rerenderOnThemeChange(): Promise<void> {
+    const rendered = Array.from(document.querySelectorAll('div.mermaid[data-source]'))
+    if (rendered.length === 0) return
+    const mermaid: MermaidApi = await loadMermaid()
+    initMermaid(mermaid)
+    for (const wrapper of rendered) {
+      const source = wrapper.getAttribute('data-source') ?? ''
+      const index = wrapper.getAttribute('data-mermaid-index') ?? '0'
+      try {
+        const { svg } = await mermaid.render(`mermaid-diagram-rerender-${index}`, source)
+        wrapper.innerHTML = svg
+      } catch {
+        // Keep the previous rendering on failure.
+      }
+    }
+  }
+
+  void renderAll()
+
+  // The theme toggle flips `data-theme` on <html>; re-render diagrams to match.
+  new MutationObserver((mutations) => {
+    if (mutations.some((m) => m.attributeName === 'data-theme')) {
+      void rerenderOnThemeChange()
+    }
+  }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] })
+</script>

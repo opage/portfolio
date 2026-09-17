@@ -1,0 +1,21 @@
+---
+import { techStack, toolStack } from '../../themes/purple/tech-data'
+import { withBase } from '../utils/base'
+
+interface Props {
+  kind: 'tech' | 'tool'
+}
+
+const { kind } = Astro.props
+const items = kind === 'tech' ? techStack : toolStack
+---
+
+<div class="tech-grid">
+  {
+    items.map((item) => (
+      <span class="tech-chip">
+        <img src={withBase(item.icon)} alt="" /> {item.label}
+      </span>
+    ))
+  }
+</div>

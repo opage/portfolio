@@ -19,48 +19,6 @@ export const homeData = {
       "Azure"
     ]
   },
-  "heroName": "Olivier Page",
-  "heroImageAlt": {
-    "en": "Olivier Page working at his desk",
-    "fr": "Olivier Page à son bureau",
-    "lb": "Olivier Page bei sengem Schreifdësch"
-  },
-  "aboutAction": {
-    "en": "About me",
-    "fr": "À propos",
-    "lb": "Iwwer mech"
-  },
-  "projectsAction": {
-    "en": "View projects",
-    "fr": "Voir les projets",
-    "lb": "Projeten ukucken"
-  },
-  "features": [
-    {
-      "title": "Backend",
-      "details": {
-        "en": "Java, .NET, Spring, Quarkus — robust and scalable systems.",
-        "fr": "Java, .NET, Spring, Quarkus — des systèmes robustes et évolutifs.",
-        "lb": "Java, .NET, Spring, Quarkus — robust a skaléierbar Systemer."
-      }
-    },
-    {
-      "title": "Frontend",
-      "details": {
-        "en": "Angular and modern TypeScript for clean, reactive UIs.",
-        "fr": "Angular et TypeScript moderne pour des UI propres et réactives.",
-        "lb": "Angular a modernt TypeScript fir propper, reaktiv UIen."
-      }
-    },
-    {
-      "title": "Cloud",
-      "details": {
-        "en": "Azure, Docker, Kubernetes, and CI/CD pipelines.",
-        "fr": "Azure, Docker, Kubernetes et des pipelines CI/CD.",
-        "lb": "Azure, Docker, Kubernetes a CI/CD-Pipelines."
-      }
-    }
-  ],
   "intro": {
     "heading": {
       "en": "LET ME **INTRODUCE** MYSELF",

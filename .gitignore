@@ -12,9 +12,8 @@ dist
 dist-ssr
 *.local
 
-# VitePress
-.vitepress/dist
-.vitepress/cache
+# Astro
+.astro
 
 # Editor directories and files
 .vscode/*

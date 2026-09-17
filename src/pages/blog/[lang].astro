@@ -1,0 +1,18 @@
+---
+import Layout from '../../layouts/Layout.astro'
+import BlogList from '../../components/BlogList.astro'
+import { normalizeLang } from '../../utils/i18n'
+
+export function getStaticPaths() {
+  return [{ params: { lang: 'en' } }, { params: { lang: 'fr' } }, { params: { lang: 'lb' } }]
+}
+
+const { lang: langParam } = Astro.params
+const lang = normalizeLang(langParam)
+---
+
+<Layout title="Blog" lang={lang} currentPath={Astro.url.pathname}>
+  <div class="vp-doc">
+    <BlogList lang={lang} />
+  </div>
+</Layout>
