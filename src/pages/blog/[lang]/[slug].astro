@@ -1,0 +1,71 @@
+---
+import { readFileSync } from 'node:fs'
+import { join } from 'node:path'
+import Layout from '../../../layouts/Layout.astro'
+import MermaidLoader from '../../../components/MermaidLoader.astro'
+import UiPill from '../../../components/UiPill.astro'
+import { posts } from '../../../../themes/purple/blog-data/posts'
+import { bodyTranslations } from '../../../../themes/purple/blog-data/translations'
+import { getDict, normalizeLang } from '../../../utils/i18n'
+import { readingTime, renderMarkdown, resolveBlogTemplate } from '../../../utils/markdown'
+
+export function getStaticPaths() {
+  const langs = ['en', 'fr', 'lb']
+  return posts.flatMap((post) =>
+    langs.map((lang) => ({ params: { lang, slug: post.slug } })),
+  )
+}
+
+const { lang: langParam, slug } = Astro.params
+const lang = normalizeLang(langParam)
+const dict = getDict(lang)
+const post = posts.find((p) => p.slug === slug)
+
+if (!post || !slug) {
+  throw new Error(`Unknown blog post: ${slug}`)
+}
+
+const template = readFileSync(join(process.cwd(), 'src', 'content', 'blog', `${slug}.md`), 'utf-8')
+const html = await renderMarkdown(resolveBlogTemplate(slug, template, lang))
+
+const title = post.title[lang] ?? slug
+const description = post.description[lang] ?? ''
+const minutes = readingTime(
+  Object.values(bodyTranslations[post.slug] ?? {})
+    .map((t) => t.en ?? '')
+    .join('\n'),
+)
+
+function formatDate(date: string): string {
+  if (!date) return ''
+  const parsed = new Date(date)
+  if (Number.isNaN(parsed.getTime())) return date
+  return parsed.toLocaleDateString(lang === 'lb' ? 'lb-LU' : lang, {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  })
+}
+---
+
+<Layout title={title} description={description} lang={lang} currentPath={Astro.url.pathname}>
+  <div class="vp-doc">
+    <h1>{title}</h1>
+    <div class="text-sm text-gray-500 dark:text-gray-400">
+      <time>{formatDate(post.date)}</time>
+      <span> · {minutes} {dict.blog.minutes}</span>
+    </div>
+    <p class="mt-2 text-gray-600 dark:text-gray-300">{description}</p>
+    {
+      post.tags.length > 0 && (
+        <p class="mt-2 flex flex-wrap gap-1.5">
+          {post.tags.map((tag) => (
+            <UiPill size="sm">{tag}</UiPill>
+          ))}
+        </p>
+      )
+    }
+    <div set:html={html} />
+  </div>
+  <MermaidLoader />
+</Layout>

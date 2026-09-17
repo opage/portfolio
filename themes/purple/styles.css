@@ -1,64 +1,225 @@
 @import "tailwindcss";
 
+/* Tailwind content sources: theme folder, Astro sources, blog templates. */
 @source "../purple";
+@source "../../src";
 @source "../../content";
 
-@custom-variant dark (&:where(.dark, .dark *));
+/* DOSSIER-style theme switching via [data-theme] (light default, dark opt-in).
+   Keeps every `dark:` utility working while following the reference mechanics. */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/* ---- DOSSIER primitives (warm paper / clay) ----------------------------- */
+:root {
+  --paper-0: #ffffff;
+  --paper-50: #f6f4ef;
+  --paper-100: #efece4;
+  --paper-150: #eae6dc;
+  --paper-card: #fffdf9;
+  --paper-border: #e3ddd0;
+  --paper-border-2: #ece7db;
+
+  --slate-900: #100f0c;
+  --slate-850: #15140f;
+  --slate-800: #1c1a15;
+  --slate-780: #211e18;
+  --slate-band: #221f18;
+  --slate-border: #302c24;
+  --slate-border-2: #262219;
+
+  --ink-900: #221f1b;
+  --ink-600: #6a6357;
+  --ink-400: #8a8273;
+  --cream-100: #ece9e2;
+  --cream-300: #9d9588;
+  --cream-500: #837b6d;
+
+  --clay-light: #a8492a;
+  --clay-light-strong: #bc4e25;
+  --clay-light-deep: #893a20;
+  --clay-light-tint: #f4e7df;
+  --clay-dark: #e2966a;
+  --clay-dark-strong: #ec9f70;
+  --clay-dark-deep: #cf8256;
+  --clay-dark-tint: rgba(226, 150, 106, 0.14);
+}
+
+/* ---- Semantic tokens: light default, dark via [data-theme] -------------- */
+:root,
+[data-theme="light"] {
+  color-scheme: light;
+
+  --bg: var(--paper-50);
+  --surface: var(--paper-card);
+  --surface-2: var(--paper-0);
+  --fill-subtle: var(--paper-100);
+
+  --fg: var(--ink-900);
+  --muted: var(--ink-600);
+  --subtle: var(--ink-400);
+  --on-accent: #fffaf5;
+
+  --border: var(--paper-border);
+  --hairline: var(--paper-border-2);
+  --rule: #d8d1c2;
+
+  --accent: var(--clay-light);
+  --accent-strong: var(--clay-light-strong);
+  --accent-deep: var(--clay-light-deep);
+  --accent-soft: var(--clay-light-tint);
+  --accent-ring: rgba(168, 73, 42, 0.28);
+
+  --shadow-sm:
+    0 1px 2px rgba(34, 31, 27, 0.06), 0 1px 3px rgba(34, 31, 27, 0.06);
+  --shadow-md:
+    0 2px 4px rgba(34, 31, 27, 0.05), 0 8px 24px rgba(34, 31, 27, 0.08);
+  --shadow-lg:
+    0 16px 40px rgba(34, 31, 27, 0.12), 0 4px 10px rgba(34, 31, 27, 0.07);
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --bg: var(--slate-850);
+  --surface: var(--slate-800);
+  --surface-2: var(--slate-780);
+  --fill-subtle: var(--slate-border-2);
+
+  --fg: var(--cream-100);
+  --muted: var(--cream-300);
+  --subtle: var(--cream-500);
+  --on-accent: #1c130d;
+
+  --border: var(--slate-border);
+  --hairline: var(--slate-border-2);
+  --rule: #322d24;
+
+  --accent: var(--clay-dark);
+  --accent-strong: var(--clay-dark-strong);
+  --accent-deep: var(--clay-dark-deep);
+  --accent-soft: var(--clay-dark-tint);
+  --accent-ring: rgba(226, 150, 106, 0.36);
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.44), 0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 2px 6px rgba(0, 0, 0, 0.46), 0 10px 26px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 18px 44px rgba(0, 0, 0, 0.6), 0 4px 12px rgba(0, 0, 0, 0.46);
+}
+
+/* ---- Tailwind theme: type, radius, shadow + semantic color bridge --------
+   `@theme inline` keeps utilities referencing the runtime vars above, so
+   `bg-surface text-fg border-border …` follow [data-theme] with no extra
+   `dark:` overrides. The legacy `brand-*` scale is bridged onto the clay
+   accent so existing components reskin automatically. */
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-fill-subtle: var(--fill-subtle);
+
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-subtle: var(--subtle);
+  --color-on-accent: var(--on-accent);
+
+  --color-border: var(--border);
+  --color-hairline: var(--hairline);
+  --color-rule: var(--rule);
+
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-accent-deep: var(--accent-deep);
+  --color-accent-soft: var(--accent-soft);
+
+  --color-brand-200: var(--accent);
+  --color-brand-300: var(--accent);
+  --color-brand-400: var(--accent);
+  --color-brand-500: var(--accent);
+  --color-brand-600: var(--accent);
+  --color-brand-700: var(--accent-deep);
+  --color-brand-800: var(--surface);
+  --color-brand-900: var(--fg);
+  --color-brand-950: var(--surface);
+
+  --color-gray-300: var(--muted);
+  --color-gray-400: var(--subtle);
+  --color-gray-500: var(--muted);
+  --color-gray-600: var(--muted);
+  --color-gray-700: var(--fg);
+  --color-gray-900: var(--fg);
+}
 
 @theme {
-  --color-brand-50: #faf5ff;
-  --color-brand-100: #f3e8ff;
-  --color-brand-200: #e9d5ff;
-  --color-brand-300: #d9b8f0;
-  --color-brand-400: #c770f0;
-  --color-brand-500: #a24bd1;
-  --color-brand-600: #9333ea;
-  --color-brand-700: #7e22ce;
-  --color-brand-800: #6d28d9;
-  --color-brand-900: #581c87;
-  --color-brand-950: #3b0764;
+  --font-display: "Fraunces", "Iowan Old Style", Georgia, serif;
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", "SF Mono", ui-monospace, Menlo, monospace;
 
-  --font-sans: 'Outfit', 'Inter', ui-sans-serif, system-ui, sans-serif;
-  --font-mono: 'PT Mono', ui-monospace, 'SFMono-Regular', monospace;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+
+  --shadow-sm:
+    0 1px 2px rgba(34, 31, 27, 0.06), 0 1px 3px rgba(34, 31, 27, 0.06);
+  --shadow-md:
+    0 2px 4px rgba(34, 31, 27, 0.05), 0 8px 24px rgba(34, 31, 27, 0.08);
+  --shadow-lg:
+    0 16px 40px rgba(34, 31, 27, 0.12), 0 4px 10px rgba(34, 31, 27, 0.07);
 }
 
-:root {
-  --vp-c-brand-1: var(--color-brand-500);
-  --vp-c-brand-2: var(--color-brand-400);
-  --vp-c-brand-3: var(--color-brand-300);
-  --vp-c-bg: #f5f1fb;
-  --vp-c-bg-soft: #ece4f6;
-  --vp-c-bg-alt: #ffffff;
-  --vp-c-text-1: #211d33;
-  --vp-c-text-2: #4a4560;
-  --vp-c-divider: rgba(124, 58, 237, 0.15);
-  --vp-font-family-base: var(--font-sans);
-  --vp-font-family-mono: var(--font-mono);
+/* ---- Base --------------------------------------------------------------- */
+html {
+  overflow-x: clip;
+  -webkit-text-size-adjust: 100%;
 }
 
-.dark {
-  --vp-c-brand-1: var(--color-brand-400);
-  --vp-c-brand-2: var(--color-brand-500);
-  --vp-c-brand-3: var(--color-brand-800);
-  --vp-c-bg: #14101e;
-  --vp-c-bg-soft: #1b1629;
-  --vp-c-bg-alt: #201a33;
-  --vp-c-text-1: #ffffff;
-  --vp-c-text-2: #d9d0ea;
-  --vp-c-divider: rgba(199, 112, 240, 0.2);
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.skip-link {
+  position: fixed;
+  top: 0;
+  left: 12px;
+  z-index: 100;
+  padding: 8px 16px;
+  background: var(--surface);
+  color: var(--fg);
+  border: 1px solid var(--border);
+  border-radius: 0 0 10px 10px;
+  box-shadow: var(--shadow-md);
+  font-size: 0.875rem;
+  transform: translateY(-120%);
+  transition: transform 160ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+/* ---- Components ---------------------------------------------------------- */
 @layer components {
   .card {
-    @apply rounded-xl border border-brand-500/15 bg-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-brand-500/10 dark:border-brand-400/20 dark:bg-brand-950/50;
+    @apply rounded-lg border border-border bg-surface shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md;
   }
 
   .btn-primary {
-    @apply inline-flex items-center gap-2 rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-px hover:bg-brand-700 hover:shadow-md hover:shadow-brand-500/25;
+    @apply inline-flex items-center gap-2 rounded-md bg-accent px-5 py-3 text-sm font-medium text-on-accent shadow-sm transition hover:-translate-y-px hover:bg-accent-deep hover:shadow-md;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center gap-2 rounded-md border border-border bg-transparent px-5 py-3 text-sm font-medium text-muted transition hover:border-accent hover:text-accent;
   }
 
   .icon-btn {
-    @apply inline-flex h-11 w-11 items-center justify-center rounded-full bg-white text-brand-600 shadow-sm transition hover:-translate-y-0.5 hover:bg-brand-600 hover:text-white hover:shadow-lg hover:shadow-brand-500/30 dark:bg-brand-950/60 dark:text-brand-400;
+    @apply inline-flex h-11 w-11 items-center justify-center rounded-full bg-surface text-accent shadow-sm transition hover:-translate-y-0.5 hover:bg-accent hover:text-on-accent hover:shadow-md;
   }
 
   .tech-grid {
@@ -66,7 +227,7 @@
   }
 
   .tech-chip {
-    @apply inline-flex items-center gap-2 rounded-full border border-brand-400/50 px-3.5 py-1.5 text-sm text-brand-700 dark:border-brand-400/30 dark:text-brand-300;
+    @apply inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3.5 py-1.5 text-sm text-fg;
   }
 
   .about-image {
@@ -74,12 +235,49 @@
   }
 
   .accent {
-    @apply font-semibold text-brand-600 dark:text-brand-400;
+    @apply font-semibold text-accent;
+  }
+
+  /* Masthead nav links with animated clay underline. */
+  .masthead-link {
+    @apply relative px-0 py-1 text-sm text-muted no-underline transition-colors hover:text-fg;
+  }
+  .masthead-link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 1.5px;
+    background: var(--accent);
+    transition: width 160ms cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+  .masthead-link:hover::after,
+  .masthead-link[aria-current="page"]::after {
+    width: 100%;
+  }
+  .masthead-link[aria-current="page"] {
+    @apply text-fg;
   }
 }
 
 .tech-chip img {
   height: 1.1rem;
+}
+
+/* Dark tech icons (e.g. near-black glyphs) vanish on the graphite theme,
+   so seat every chip icon on a light tile when in dark mode. */
+[data-theme="dark"] .tech-chip img {
+  background: var(--cream-100);
+  border-radius: 4px;
+  padding: 2px;
+}
+
+/* Headings inside .vp-doc get the Fraunces editorial treatment. */
+.vp-doc h1,
+.vp-doc h2.company,
+.vp-doc h2.post-title {
+  font-family: var(--font-display);
 }
 
 /* component headings inside .vp-doc must not inherit the h2 divider */
@@ -90,29 +288,29 @@
   padding-top: 0 !important;
 }
 
-/* the download button must beat VitePress's unlayered `.vp-doc a` styles */
+/* the download button must beat unlayered `.vp-doc a` styles */
 .vp-doc a.btn-primary {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-  background-color: var(--color-brand-600);
-  color: #fff;
+  padding: 0.75rem 1.25rem;
+  border-radius: 10px;
+  background-color: var(--accent);
+  color: var(--on-accent);
   font-size: 0.875rem;
   line-height: 1.25rem;
-  font-weight: 600;
+  font-weight: 500;
   text-decoration: none;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-sm);
   transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s;
 }
 
 .vp-doc a.btn-primary:hover {
-  background-color: var(--color-brand-700);
-  color: #fff;
+  background-color: var(--accent-deep);
+  color: var(--on-accent);
   text-decoration: none;
   transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(124, 58, 237, 0.25);
+  box-shadow: var(--shadow-md);
 }
 
 /* blog post card: no underline on the whole card, only the title on hover */
@@ -129,28 +327,15 @@
   transform: perspective(1000px) rotateX(8deg) rotateY(-8deg);
 }
 
-html {
-  overflow-x: clip;
-  transition: background-color 0.3s ease;
-}
-
-body {
-  background-image: linear-gradient(to left, #f5f1fb, #ece4f6);
-  background-attachment: fixed;
-}
-
-.dark body {
-  background-image: linear-gradient(to left, rgb(27 20 41), rgb(20 15 35));
-}
-
+/* DOSSIER hero headline: solid ink Fraunces, no gradient. */
 .home-name {
-  font-size: clamp(2.25rem, 6vw, 3.5rem);
-  font-weight: 700;
-  line-height: 1.1;
-  background: linear-gradient(120deg, var(--color-brand-500), var(--color-brand-400));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  font-family: var(--font-display);
+  font-variation-settings: "opsz" 132, "wght" 460, "SOFT" 0, "WONK" 0;
+  font-size: clamp(2.75rem, 1.6rem + 4.6vw, 4.5rem);
+  font-weight: 460;
+  line-height: 1.06;
+  letter-spacing: -0.022em;
+  color: var(--fg);
 }
 
 /* make the home section span the full viewport width */
@@ -166,11 +351,6 @@ body {
   max-width: 72rem;
   padding-left: 1.5rem;
   padding-right: 1.5rem;
-}
-
-/* widen the main content of pages marked with `pageClass: wide-page` */
-.wide-page .vp-doc {
-  max-width: 72rem;
 }
 
 /* home hero entrance + floating effects */
@@ -213,25 +393,9 @@ body {
   animation: float 6s ease-in-out infinite;
 }
 
-/* shimmering gradient on the hero role text */
-@keyframes shimmer {
-  to {
-    background-position: 200% center;
-  }
-}
-
+/* role line under the hero name: solid clay, keeps the typewriter caret */
 .home-role {
-  background: linear-gradient(
-    100deg,
-    var(--vp-c-brand-1) 0%,
-    var(--vp-c-brand-2) 50%,
-    var(--vp-c-brand-1) 100%
-  );
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  animation: shimmer 3s linear infinite;
+  color: var(--accent);
 }
 
 @keyframes blink {
@@ -241,7 +405,7 @@ body {
 }
 
 .typewriter-cursor {
-  color: var(--vp-c-brand-1);
+  color: var(--accent);
   animation: blink 1s step-end infinite;
 }
 
@@ -256,8 +420,8 @@ body {
 
 .home-feature:hover {
   transform: translateY(-4px);
-  border-color: var(--color-brand-400);
-  box-shadow: 0 12px 32px rgba(124, 58, 237, 0.22);
+  border-color: var(--accent);
+  box-shadow: var(--shadow-md);
 }
 
 .feature-icon {
@@ -267,9 +431,9 @@ body {
   width: 48px;
   height: 48px;
   border-radius: 12px;
-  background: linear-gradient(135deg, var(--color-brand-500), var(--color-brand-400));
-  color: #fff;
-  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25);
+  background: var(--accent);
+  color: var(--on-accent);
+  box-shadow: var(--shadow-sm);
   transition: transform 0.25s ease;
 }
 
@@ -284,29 +448,103 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   .hero-fade-up,
-  .hero-image-float,
-  .home-role {
+  .hero-image-float {
     animation: none;
   }
 }
 
-.VPDoc h1 {
-  background: linear-gradient(120deg, var(--vp-c-brand-1), var(--vp-c-brand-2));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+/* Page + prose headings: Fraunces, solid ink. */
+main h1 {
+  font-family: var(--font-display);
+  font-variation-settings: "opsz" 72, "wght" 480, "SOFT" 0, "WONK" 0;
+  font-size: clamp(2rem, 1.45rem + 2.3vw, 3rem);
+  line-height: 1.16;
+  letter-spacing: -0.02em;
+  color: var(--fg);
 }
 
 .vp-doc h2 {
-  border-top: 1px solid var(--vp-c-divider);
+  font-family: var(--font-display);
+  border-top: 1px solid var(--rule);
   padding-top: 24px;
+  color: var(--fg);
+}
+
+.vp-doc h3 {
+  color: var(--fg);
+}
+
+.vp-doc p,
+.vp-doc li {
+  color: var(--fg);
+}
+
+.vp-doc a {
+  color: var(--accent);
+}
+
+/* code blocks rendered by Astro's Markdown plugin (Shiki, github-dark) and
+   mermaid placeholders emitted by rehype-mermaid (`pre-mermaid` strategy) */
+.vp-doc pre.astro-code,
+.vp-doc pre.mermaid {
+  margin: 1rem 0;
+  padding: 1rem 1.25rem;
+  border-radius: 14px;
+  overflow-x: auto;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  border: 1px solid var(--border);
+}
+
+.vp-doc pre.mermaid {
+  background-color: #0d1117;
+  color: #e6edf3;
+  white-space: pre-wrap;
+}
+
+/* GFM tables rendered by remark-gfm */
+.vp-doc table {
+  width: 100%;
+  margin: 1.25rem 0;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+.vp-doc th,
+.vp-doc td {
+  border: 1px solid var(--border);
+  padding: 0.6rem 0.9rem;
+  text-align: left;
+}
+
+.vp-doc thead th {
+  background-color: var(--accent-soft);
+  font-weight: 600;
+  color: var(--fg);
+}
+
+.vp-doc tbody tr:nth-child(even) {
+  background-color: var(--fill-subtle);
+}
+
+.vp-doc :not(pre) > code {
+  padding: 0.15rem 0.4rem;
+  border-radius: 6px;
+  font-size: 0.875em;
+  background-color: var(--accent-soft);
+  color: var(--accent);
 }
 
 .mermaid {
   display: flex;
   justify-content: center;
   margin: 1.5rem 0;
+  padding: 1.125rem 1.25rem;
   overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface);
 }
 
 .mermaid svg {
@@ -314,19 +552,13 @@ body {
   height: auto;
 }
 
-.VPNavBar .translations,
-.VPNavScreen .translations {
+/* Theme toggle icons: moon in light (click → dark), sun in dark. */
+.theme-toggle__icon--sun {
   display: none;
 }
-
-/* Keep the navigation menu visible while scrolling */
-@media (max-width: 959px) {
-  .VPNav {
-    position: sticky !important;
-    top: 0 !important;
-  }
-
-  .VPNavBar {
-    background-color: var(--vp-c-bg) !important;
-  }
+[data-theme="dark"] .theme-toggle__icon--moon {
+  display: none;
+}
+[data-theme="dark"] .theme-toggle__icon--sun {
+  display: block;
 }

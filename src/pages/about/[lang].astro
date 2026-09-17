@@ -1,0 +1,73 @@
+---
+import Layout from '../../layouts/Layout.astro'
+import TechChips from '../../components/TechChips.astro'
+import { pageTranslations } from '../../../themes/purple/translations'
+import { withBase } from '../../utils/base'
+import { getDict, normalizeLang } from '../../utils/i18n'
+import { renderInline } from '../../utils/markdown'
+
+export function getStaticPaths() {
+  return [{ params: { lang: 'en' } }, { params: { lang: 'fr' } }, { params: { lang: 'lb' } }]
+}
+
+const { lang: langParam } = Astro.params
+const lang = normalizeLang(langParam)
+const dict = getDict(lang)
+
+const t = (key: string): string =>
+  (pageTranslations as Record<string, Record<string, string>>)[key]?.[lang] ?? ''
+
+// Pre-render every translated snippet through Astro's Markdown plugin.
+const keys = [
+  'about-heading',
+  'about-image-alt',
+  'about-line-1',
+  'about-line-2',
+  'about-line-3',
+  'about-line-4',
+  'about-skillset',
+  'about-soft-skills',
+  'about-tools',
+  ...[1, 2, 3, 4, 5].flatMap((n) => [`soft-skill-${n}-title`, `soft-skill-${n}-desc`]),
+]
+const entries = await Promise.all(keys.map(async (key) => [key, await renderInline(t(key))] as const))
+const c: Record<string, string> = Object.fromEntries(entries)
+
+const softSkills = [1, 2, 3, 4, 5].map((n) => ({
+  title: c[`soft-skill-${n}-title`],
+  desc: c[`soft-skill-${n}-desc`],
+}))
+---
+
+<Layout title={dict.nav.about} lang={lang} currentPath={Astro.url.pathname}>
+  <div class="vp-doc">
+    <h1 set:html={c['about-heading']} />
+
+    <img src={withBase('/images/about.svg')} alt={t('about-image-alt')} class="about-image" />
+
+    <p set:html={c['about-line-1']} />
+    <p set:html={c['about-line-2']} />
+    <p set:html={c['about-line-3']} />
+    <p set:html={c['about-line-4']} />
+
+    <h2 set:html={c['about-skillset']} />
+
+    <TechChips kind="tech" />
+
+    <h2 set:html={c['about-soft-skills']} />
+
+    <ul class="list-disc space-y-1 pl-5">
+      {
+        softSkills.map((skill) => (
+          <li>
+            <strong set:html={skill.title} /> — <span set:html={skill.desc} />
+          </li>
+        ))
+      }
+    </ul>
+
+    <h2 set:html={c['about-tools']} />
+
+    <TechChips kind="tool" />
+  </div>
+</Layout>

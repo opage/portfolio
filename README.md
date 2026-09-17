@@ -8,7 +8,7 @@
   <img src="https://forthebadge.com/images/badges/built-with-love.svg" alt="Built with love" />
   <img src="https://forthebadge.com/images/badges/open-source.svg" alt="Open Source" />
   <br />
-  <img src="https://img.shields.io/badge/VitePress-1.6.4-3eaf7c?style=for-the-badge&logo=vuedotjs&logoColor=white" alt="VitePress" />
+  <img src="https://img.shields.io/badge/Astro-7-BC52EE?style=for-the-badge&logo=astro&logoColor=white" alt="Astro" />
   <img src="https://img.shields.io/badge/Vue.js-3-4FC08D?style=for-the-badge&logo=vuedotjs&logoColor=white" alt="Vue.js" />
   <img src="https://img.shields.io/badge/Tailwind_CSS-4-38B2AC?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="Tailwind CSS" />
   <img src="https://img.shields.io/badge/Mermaid-11-FF3670?style=for-the-badge&logo=mermaid&logoColor=white" alt="Mermaid" />
@@ -22,16 +22,21 @@
 
 ## About
 
-Trilingual portfolio built with [VitePress](https://vitepress.dev), styled with
-[Tailwind CSS](https://tailwindcss.com) and enhanced with
+Trilingual portfolio built with [Astro](https://astro.build), styled with
+[Tailwind CSS](https://tailwindcss.com), interactive islands in
+[Vue 3](https://vuejs.org) and enhanced with
 [Mermaid](https://mermaid.js.org) diagrams.
 
 ## Built With
 
-- [VitePress](https://vitepress.dev) — Vue-powered static site generator
-- [Vue 3](https://vuejs.org) — component framework
+- [Astro](https://astro.build) — static site generator (zero JS by default)
+- [Vue 3](https://vuejs.org) — interactive islands (typewriter, timeline)
 - [Tailwind CSS 4](https://tailwindcss.com) — utility-first styling
-- [Mermaid](https://mermaid.js.org) — diagrams rendered via `vitepress-plugin-mermaid`
+- [Mermaid](https://mermaid.js.org) — diagrams via `rehype-mermaid`
+  (`pre-mermaid` strategy) + `MermaidLoader.astro`, with light/dark re-rendering
+- [Astro Markdown](https://docs.astro.build/en/guides/markdown-content/)
+  (`@astrojs/markdown-remark`) — blog rendering with `remark-gfm` tables and
+  Shiki syntax highlighting
 
 ## Features
 
@@ -46,29 +51,20 @@ Trilingual portfolio built with [VitePress](https://vitepress.dev), styled with
 
 ```
 .
-├─ .vitepress/
-│  ├─ config.mts        # VitePress + Tailwind + Mermaid config
-│  └─ theme/
-│     └─ index.ts       # re-exports the active theme (switch here)
-├─ content/             # markdown source (srcDir)
-│  ├─ home/{en,fr,lb}/index.md        → /, /fr/, /lb/
-│  ├─ about/{en,fr,lb}/index.md       → /about/{lang}/
-│  ├─ experience/{en,fr,lb}/index.md  → /experience/{lang}/
-│  ├─ projects/{en,fr,lb}/index.md    → /projects/{lang}/
-│  ├─ resume/{en,fr,lb}/index.md      → /resume/{lang}/
-│  ├─ blog/{en,fr,lb}/*.md            → /blog/{lang}/
-│  └─ public/           # static assets (images, PDFs, _headers)
+├─ astro.config.mjs      # Astro + Vue + Tailwind config (BASE_PATH aware)
+├─ public/               # static assets (images, PDFs, _headers)
+├─ src/
+│  ├─ pages/             # routes: /, /fr/, /lb/, /about/[lang], /blog/[lang]/[slug], …
+│  ├─ layouts/Layout.astro  # nav, footer, dark mode, language switcher shell
+│  ├─ components/        # Astro components + Vue islands (Typewriter, ExperienceTimeline)
+│  ├─ content/blog/      # blog markdown templates with [[placeholders]]
+│  └─ utils/             # i18n, site meta, markdown rendering, base-path helper
 └─ themes/
    └─ purple/           # the current theme (folder-style)
-      ├─ index.ts
-      ├─ Layout.vue
       ├─ styles.css     # Tailwind entry + design tokens
-      ├─ dict.ts        # i18n dictionary loader
       ├─ projects-data.ts
       ├─ i18n/{en,fr,lb}.ts
-      └─ components/
-         ├─ ui/UiPill.vue   # reusable pill/badge
-         └─ ... (feature components)
+      └─ ...
 ```
 
 ## Getting Started
@@ -76,14 +72,14 @@ Trilingual portfolio built with [VitePress](https://vitepress.dev), styled with
 You need Node.js and git installed.
 
 1. `npm install`
-2. `npm run dev` — starts the dev server at http://localhost:5173
-3. `npm run build` — production build (output in `.vitepress/dist`)
+2. `npm run dev` — starts the dev server at http://localhost:4321
+3. `npm run build` — production build (output in `dist/`)
 4. `npm run preview` — preview the production build
 
 ## Internationalization (i18n)
 
-The site is trilingual. Each section follows a `{page}/{lang}/` convention.
-Translations live in `themes/purple/i18n/`:
+The site is trilingual. Routes follow a `{page}/{lang}/` convention
+(`src/pages/about/[lang].astro`, …). Translations live in `themes/purple/i18n/`:
 
 - `en.ts` — English
 - `fr.ts` — French
@@ -94,20 +90,20 @@ The language is switched via the flag toggle in the navbar.
 
 ## Themes
 
-Themes are self-contained folders under `themes/`. The active theme is selected
-by the re-export in `.vitepress/theme/index.ts`:
+The visual design follows the DOSSIER editorial style (warm paper, clay
+terracotta accent, Fraunces / Inter / JetBrains Mono, `[data-theme]`
+light+dark) inspired by
+[RachidChabane/my-blog](https://github.com/RachidChabane/my-blog), implemented
+with Tailwind CSS v4 semantic tokens in `themes/purple/styles.css`.
 
-```ts
-// .vitepress/theme/index.ts
-export { default } from '../../themes/purple'
-```
-
-To create a new theme, copy `themes/purple` to `themes/<name>`, customise it, and
-update the re-export above.
+Themes are self-contained folders under `themes/`. Shared data, dictionaries and
+styles live in `themes/purple/` and are consumed by the Astro pages, layout and
+components under `src/`.
 
 ## Mermaid Diagrams
 
-Write diagrams in any Markdown file using a `mermaid` fenced code block:
+Write diagrams in any blog template (`src/content/blog/*.md`) using a `mermaid`
+fenced code block:
 
 ````md
 ```mermaid
@@ -116,7 +112,8 @@ flowchart LR
 ```
 ````
 
-Rendering is handled by `vitepress-plugin-mermaid`. Dark mode is detected
+Rendering is handled by `src/components/MermaidLoader.astro`, which renders
+diagrams client-side with the `mermaid` package. Dark mode is detected
 automatically — diagrams re-render when the theme changes.
 
 ## Deployment

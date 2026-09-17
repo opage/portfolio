@@ -1,0 +1,26 @@
+---
+import Layout from '../../layouts/Layout.astro'
+import ExperienceTimeline from '../../components/ExperienceTimeline.vue'
+import { experienceData } from '../../../themes/purple/experience-data'
+import { getDict, normalizeLang } from '../../utils/i18n'
+import { renderInline } from '../../utils/markdown'
+
+export function getStaticPaths() {
+  return [{ params: { lang: 'en' } }, { params: { lang: 'fr' } }, { params: { lang: 'lb' } }]
+}
+
+const { lang: langParam } = Astro.params
+const lang = normalizeLang(langParam)
+const dict = getDict(lang)
+const heading = await renderInline(experienceData.heading[lang])
+---
+
+<Layout title={dict.nav.experience} lang={lang} currentPath={Astro.url.pathname}>
+  <div class="vp-doc">
+    <h1 set:html={heading} />
+
+    <p>{experienceData.subtitle[lang]}</p>
+
+    <ExperienceTimeline lang={lang} client:load />
+  </div>
+</Layout>
