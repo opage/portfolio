@@ -87,6 +87,13 @@
     <text x="364" y="426" font-family="Inter, system-ui, sans-serif" font-size="14" font-weight="700" letter-spacing="1" fill="#221f1b">CI/CD</text>
   </g>
 
+  <!-- AI pill -->
+  <g transform="rotate(-5 55 20)">
+    <rect x="24" y="4" width="62" height="32" rx="16" fill="#fffdf9" stroke="#a8492a" stroke-width="1.5"/>
+    <circle cx="40" cy="20" r="5" fill="#e0a23c"/>
+    <text x="52" y="25" font-family="Inter, system-ui, sans-serif" font-size="14" font-weight="700" letter-spacing="1" fill="#221f1b">AI</text>
+  </g>
+
   <!-- deploy badge -->
   <circle cx="506" cy="396" r="26" fill="url(#clayGrad)"/>
   <circle cx="506" cy="396" r="26" fill="none" stroke="#fffdf9" stroke-width="2" opacity="0.35"/>

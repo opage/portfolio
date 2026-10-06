@@ -130,6 +130,10 @@ feature-3-details:
   en: Azure, Docker, Kubernetes, and CI/CD pipelines.
   fr: Azure, Docker, Kubernetes et des pipelines CI/CD.
   lb: Azure, Docker, Kubernetes a CI/CD-Pipelines.
+feature-4-details:
+  en: Models, inference, agents, Claude Code, and Open Code.
+  fr: Modèles, inférence, agents, Claude Code et Open Code.
+  lb: Modeller, Inferenz, Agenten, Claude Code an Open Code.
 intro-heading:
   en: LET ME **INTRODUCE** MYSELF
   fr: LAISSEZ-MOI **ME PRÉSENTER**
