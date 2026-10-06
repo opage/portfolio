@@ -37,7 +37,7 @@ const t = (key: string): string =>
           />
         </div>
       </div>
-      <div class="hero-fade-up delay-3 mt-6 grid gap-4 sm:grid-cols-3">
+      <div class="hero-fade-up delay-3 mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <div class="home-feature card p-6">
           <div class="feature-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -64,6 +64,16 @@ const t = (key: string): string =>
           </div>
           <h3 class="mt-4 text-lg font-semibold text-brand-700 dark:text-brand-200">Cloud</h3>
           <p class="mt-1 text-sm leading-relaxed text-gray-600 dark:text-gray-300">{t('feature-3-details')}</p>
+        </div>
+        <div class="home-feature card p-6">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9L12 3z" />
+              <path d="M19 15l.9 2.4L22 18l-2.1.6L19 21l-.9-2.4L16 18l2.1-.6L19 15z" />
+            </svg>
+          </div>
+          <h3 class="mt-4 text-lg font-semibold text-brand-700 dark:text-brand-200">AI</h3>
+          <p class="mt-1 text-sm leading-relaxed text-gray-600 dark:text-gray-300">{t('feature-4-details')}</p>
         </div>
       </div>
     </div>
