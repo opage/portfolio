@@ -3720,4 +3720,116 @@ typescript-javascript-for-experts:
       Result Types, fir Feeler op d'Compile-Zäit ze verleeën. Wann Dir dës Muster\r
 
       adoptéiert, gëtt Äre Code méi kleng, méi sécher a vill méi einfach ze verstoen.\r"
-
+claude-code-for-experts:
+  para-claude-code-is-an:
+    en: "Claude Code is Anthropic's agentic coding tool that runs in your terminal and can pair with you at every step of the software development life cycle. This guide maps the seven phases — from requirements to operations — to the concrete prompts, configuration, and diagrams an expert developer actually uses.\r"
+    fr: "Claude Code est l'outil de codage agentique d'Anthropic, qui s'exécute dans votre terminal et peut vous accompagner à chaque étape du cycle de vie logiciel. Ce guide relie les sept phases — des exigences à l'exploitation — aux prompts, à la configuration et aux diagrammes concrets qu'un développeur expert utilise réellement.\r"
+    lb: "Claude Code ass dem Anthropic säin agentescht Coding-Tool, dat an Ärem Terminal leeft an Iech bei all Schrëtt vum Software Life Cycle begleede kann. Dëse Guide verbënnt déi siwe Phasen — vun den Ufuerderunge bis zum Betrib — mat de konkrete Prompts, der Configuratioun an den Diagrammer, déi en Expert-Entwéckler wierklech benotzt.\r"
+  the-sdlc-in-seven-phases:
+    en: "## The SDLC in seven phases\r"
+    fr: "## Le cycle de vie en sept phases\r"
+    lb: "## Den SDLC a siwe Phasen\r"
+  para-claude-code-fits:
+    en: "Every phase has a job for the agent. At each step you decide what to hand off and what to review yourself. Here is the loop, then each phase in detail.\r"
+    fr: "Chaque phase a une tâche pour l'agent. À chaque étape, vous décidez quoi déléguer et quoi relire vous-même. Voici la boucle, puis chaque phase en détail.\r"
+    lb: "All Phas huet eng Aufgab fir den Agent. Bei all Schrëtt entscheet Dir, wat Dir ofgitt a wat Dir selwer iwwerpréift. Hei ass de Loop, duerno all Phas am Detail.\r"
+  requirements:
+    en: "## 1. Requirements\r"
+    fr: "## 1. Exigences\r"
+    lb: "## 1. Ufuerderungen\r"
+  para-distill-requirements:
+    en: "Claude turns raw notes into a structured backlog and, more importantly, calls out what is ambiguous before it becomes a bug. Give it the source material and a strict output shape:\r"
+    fr: "Claude transforme des notes brutes en backlog structuré et, surtout, signale ce qui est ambigu avant que cela ne devienne un bug. Donnez-lui la source et un format de sortie strict :\r"
+    lb: "De Claude mécht aus rouen Notizen e strukturéierte Backlog a weist virun allem drop hin, wat zweedeiteg ass, ier et zu engem Bug gëtt. Gitt him d'Quell an e strenge Output-Format:\r"
+  planning:
+    en: "## 2. Planning and estimation\r"
+    fr: "## 2. Planification et estimation\r"
+    lb: "## 2. Planung an Estimatioun\r"
+  para-break-the-work:
+    en: "Break epics into day-sized tasks ordered by dependency. The agent is good at sequencing because it sees the coupling between files and services:\r"
+    fr: "Découpez les epics en tâches d'une journée, ordonnées par dépendance. L'agent est doué pour le séquencement car il voit le couplage entre fichiers et services :\r"
+    lb: "Brécht Epics an Dages-Aufgaben, no Ofhängegkeet geuerdnet. Den Agent ass gutt am Sequenzéieren, well en d'Kopplung tëscht Dateien a Servicer gesäit:\r"
+  para-plan-then-build:
+    en: "For big changes, start in plan mode so Claude proposes the approach and task list before touching files. Review and adjust the plan, then let it execute. The plan becomes your gantt:\r"
+    fr: "Pour les gros changements, commencez en mode plan afin que Claude propose l'approche et la liste des tâches avant de toucher les fichiers. Relisez et ajustez le plan, puis laissez-le exécuter. Le plan devient votre gantt :\r"
+    lb: "Fir grouss Ännerungen fänkt am Plan-Modus un, sou datt de Claude d'Approche an d'Aufgabelëscht virschléit, ier en Dateien beréiert. Liest den Plan no a passt en un, da loosst en ausféieren. De Plan gëtt Äre Gantt:\r"
+  design:
+    en: "## 3. Architecture and design\r"
+    fr: "## 3. Architecture et conception\r"
+    lb: "## 3. Architektur an Design\r"
+  para-review-architecture:
+    en: "Ask Claude to produce a system diagram, then push back on it. It will happily critique coupling, single points of failure, and consistency trade-offs:\r"
+    fr: "Demandez à Claude de produire un diagramme système, puis contestez-le. Il critiquera volontiers le couplage, les points de défaillance uniques et les compromis de cohérence :\r"
+    lb: "Frot de Claude, e Systemdiagramm ze produzéieren, a widerspriecht him dann. En kritiséiert gär d'Kopplung, Single Points of Failure an d'Konsistenz-Kompromisser:\r"
+  para-record-decisions:
+    en: "Capture the outcome as an Architecture Decision Record so the next session — human or agent — starts with the same context:\r"
+    fr: "Consignez le résultat dans un Architecture Decision Record afin que la session suivante — humaine ou agent — parte du même contexte :\r"
+    lb: "Halt d'Resultat an engem Architecture Decision Record fest, sou datt déi nächst Sessioun — Mënsch oder Agent — mam selwechte Kontext ufänkt:\r"
+  development:
+    en: "## 4. Development\r"
+    fr: "## 4. Développement\r"
+    lb: "## 4. Entwécklung\r"
+  para-set-the-context:
+    en: "A production-grade CLAUDE.md is the single biggest lever for consistent output. It encodes build commands, architecture, security rules, and style so every session starts from your standards:\r"
+    fr: "Un CLAUDE.md de qualité production est le levier le plus puissant pour une sortie cohérente. Il encode les commandes de build, l'architecture, les règles de sécurité et le style afin que chaque session parte de vos standards :\r"
+    lb: "E produktiounsreif CLAUDE.md ass de gréissten Hebel fir konsistent Resultater. Et codéiert Build-Kommandoen, Architektur, Sécherheetsreegelen a Stil, sou datt all Sessioun vun Äre Standards ausgeet:\r"
+  para-codify-routines:
+    en: "Repeatable routines become skills. Write the procedure once and trigger it by name:\r"
+    fr: "Les routines répétables deviennent des skills. Écrivez la procédure une fois et déclenchez-la par son nom :\r"
+    lb: "Widderhuelbar Routinen ginn zu Skills. Schreift d'Prozedur eemol a léist se iwwer den Numm aus:\r"
+  para-delegate:
+    en: "Heavy, isolated jobs go to subagents with a narrow tool set, keeping the main session focused and cheap:\r"
+    fr: "Les tâches lourdes et isolées vont aux sous-agents au jeu d'outils restreint, gardant la session principale concentrée et peu coûteuse :\r"
+    lb: "Schwéier, isoléiert Aufgabe ginn un Subagents mat engem enken Toolset, fir d'Haaptsessioun fokusséiert a bëlleg ze halen:\r"
+  para-script-your-commands:
+    en: "Frequently used prompts become slash commands, and $ARGUMENTS makes them composable across the codebase:\r"
+    fr: "Les prompts fréquents deviennent des slash commands, et $ARGUMENTS les rend composables dans tout le code :\r"
+    lb: "Heefeg Prompts ginn zu Slash Commands, an $ARGUMENTS mécht se komposéierbar am ganze Code:\r"
+  testing:
+    en: "## 5. Testing\r"
+    fr: "## 5. Tests\r"
+    lb: "## 5. Tester\r"
+  para-tdd-loop:
+    en: "Run test-driven development as a tight loop: you write the failing test, Claude implements the minimal fix, and the suite is the contract. Iterate until green, then refactor:\r"
+    fr: "Pratiquez le développement piloté par les tests en boucle serrée : vous écrivez le test qui échoue, Claude implémente le correctif minimal, et la suite est le contrat. Itérez jusqu'au vert, puis refactorisez :\r"
+    lb: "Maacht Test-driven Development als enk Loop: Dir schreift den Test, deen feeler, de Claude implementéiert de minimale Fix, an d'Suite ass de Kontrakt. Iteréiert bis gréng, da refaktoréiert:\r"
+  para-review-before-merge:
+    en: "Before merging, hand the diff to a review subagent. It checks correctness, security, and conventions without burning your own attention.\r"
+    fr: "Avant de merger, confiez le diff à un sous-agent de revue. Il vérifie la justesse, la sécurité et les conventions sans brûler votre attention.\r"
+    lb: "Ier Dir merged, gitt den Diff un e Review-Subagent. E kontrolléiert Richtegkeet, Sécherheet a Konventiounen, ouni Är eegen Opmierksamkeet ze verbrennen.\r"
+  cicd:
+    en: "## 6. CI/CD and release\r"
+    fr: "## 6. CI/CD et release\r"
+    lb: "## 6. CI/CD a Release\r"
+  para-gate-every-merge:
+    en: "Claude Code belongs in the pipeline. A merge only happens after lint, tests, a security scan, and an automated review — then deploy with a smoke test and a rollback path:\r"
+    fr: "Claude Code a sa place dans le pipeline. Un merge n'a lieu qu'après lint, tests, scan de sécurité et revue automatisée — puis déploiement avec smoke test et chemin de rollback :\r"
+    lb: "De Claude Code gehéiert an de Pipeline. E Merge geschitt eréischt no Lint, Tester, Sécherheetsscan an automatescher Review — dann Deployment mat Smoke-Test a Rollback-Wee:\r"
+  para-headless-mode:
+    en: "Headless mode makes the agent scriptable, so release checklists and one-off migrations run from the terminal or a workflow step:\r"
+    fr: "Le mode headless rend l'agent scriptable, pour que les checklists de release et les migrations ponctuelles tournent depuis le terminal ou une étape de workflow :\r"
+    lb: "Den Headless-Modus mécht den Agent skriptbar, sou datt Release-Checklisten an eemoleg Migratiounen aus dem Terminal oder engem Workflow-Schrëtt lafen:\r"
+  para-hooks-enforce:
+    en: "Hooks enforce policy at the tool level, blocking dangerous commands before they run:\r"
+    fr: "Les hooks appliquent la politique au niveau de l'outil, en bloquant les commandes dangereuses avant qu'elles ne s'exécutent :\r"
+    lb: "Hooks setzen d'Politik um Tool-Niveau duerch a blockéieren geféierlech Kommandoen, ier se lafen:\r"
+  operations:
+    en: "## 7. Operations and maintenance\r"
+    fr: "## 7. Exploitation et maintenance\r"
+    lb: "## 7. Betrib an Ënnerhalt\r"
+  para-oncall-and-observability:
+    en: "On call, connect Claude to the code, the database, and the ticketing system through MCP, then ask it to triage an incident the way a senior engineer would:\r"
+    fr: "En astreinte, connectez Claude au code, à la base de données et au système de tickets via MCP, puis demandez-lui de trier un incident comme le ferait un ingénieur senior :\r"
+    lb: "Bei On-Call verbënnt de Claude mat dem Code, der Datebank an dem Ticketing-System iwwer MCP, da frot en, en Incident ze triagen, wéi e Senior-Ingenieur et géif:\r"
+  para-build-your-own:
+    en: "When the off-the-shelf servers are not enough, build your own with the official SDK. A server exposes typed tools Claude can call:\r"
+    fr: "Quand les serveurs prêts à l'emploi ne suffisent pas, construisez le vôtre avec le SDK officiel. Un serveur expose des outils typés que Claude peut appeler :\r"
+    lb: "Wann d'Servere vun der Stang net duerginn, baut Ären eegene mam offiziellen SDK. E Server exponéiert typiséiert Tools, déi de Claude opriffe kann:\r"
+  wrapping-up:
+    en: "## Wrapping up\r"
+    fr: "## Pour conclure\r"
+    lb: "## Zum Schluss\r"
+  para-claude-code-shifts:
+    en: "Treat Claude Code as a teammate across the whole SDLC: clarify requirements, sequence the plan, review the design, implement and test, gate the merge, and triage in production. The experts who get the most from it are the ones who define the context, codify their standards, and stay in the loop at every decision point.\r"
+    fr: "Traitez Claude Code comme un coéquipier sur tout le cycle de vie : clarifiez les exigences, séquencez le plan, relisez la conception, implémentez et testez, gardez le merge et triez en production. Les experts qui en tirent le plus sont ceux qui définissent le contexte, codifient leurs standards et restent dans la boucle à chaque point de décision.\r"
+    lb: "Behandelt de Claude Code als Teammember iwwer de ganzen SDLC: kloert Ufuerderungen, sequenzéiert de Plang, iwwerpréift den Design, implementéiert an testt, séchert de Merge a triagéiert an der Produktioun. D'Experten, déi am meeschten erauskréien, sinn déi, déi de Kontext definéieren, hir Standards codéieren an op all Entscheidungspunkt am Loop bleiwen.\r"

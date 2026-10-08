@@ -74,6 +74,14 @@ about-tools:
   en: "**Tools** I use"
   fr: "**Outils** que j'utilise"
   lb: "**Tools**, déi ech benotzen"
+about-certifications:
+  en: Professional **Certifications**
+  fr: "**Certifications** professionnelles"
+  lb: Berufflech **Zertifizéierungen**
+cert-ccdvf-title:
+  en: CCDV-F — Claude Certified Developer – Foundations
+  fr: CCDV-F — Claude Certified Developer – Fondamentaux
+  lb: CCDV-F — Claude Certified Developer – Fondamentaux
 experience-heading:
   en: Work **Experience**
   fr: Expérience **professionnelle**

@@ -28,6 +28,8 @@ const keys = [
   'about-skillset',
   'about-soft-skills',
   'about-tools',
+  'about-certifications',
+  'cert-ccdvf-title',
   ...[1, 2, 3, 4, 5].flatMap((n) => [`soft-skill-${n}-title`, `soft-skill-${n}-desc`]),
 ]
 const entries = await Promise.all(keys.map(async (key) => [key, await renderInline(t(key))] as const))
@@ -37,6 +39,8 @@ const softSkills = [1, 2, 3, 4, 5].map((n) => ({
   title: c[`soft-skill-${n}-title`],
   desc: c[`soft-skill-${n}-desc`],
 }))
+
+const aboutLines = [1, 2, 3, 4].map((n) => c[`about-line-${n}`])
 ---
 
 <Layout title={dict.nav.about} lang={lang} currentPath={Astro.url.pathname}>
@@ -45,14 +49,20 @@ const softSkills = [1, 2, 3, 4, 5].map((n) => ({
 
     <img src={withBase('/images/about.svg')} alt={t('about-image-alt')} class="about-image" />
 
-    <p set:html={c['about-line-1']} />
-    <p set:html={c['about-line-2']} />
-    <p set:html={c['about-line-3']} />
-    <p set:html={c['about-line-4']} />
+    {aboutLines.map((line) => <p set:html={line} />)}
 
     <h2 set:html={c['about-skillset']} />
 
     <TechChips kind="tech" />
+
+    <h2 set:html={c['about-certifications']} />
+
+    <div class="flex items-center gap-4">
+      <a href="https://www.credly.com/badges/2f5a4295-8f47-40ec-b825-fb8bc56161d0" target="_blank" rel="noopener noreferrer" class="shrink-0">
+        <img src={withBase('/images/cert-ccdvf.svg')} alt={t('cert-ccdvf-title')} class="h-16 w-16" />
+      </a>
+      <a href="https://www.credly.com/badges/2f5a4295-8f47-40ec-b825-fb8bc56161d0" target="_blank" rel="noopener noreferrer" set:html={c['cert-ccdvf-title']} />
+    </div>
 
     <h2 set:html={c['about-soft-skills']} />
 

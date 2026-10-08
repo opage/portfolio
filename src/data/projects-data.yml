@@ -34,7 +34,10 @@ items:
       - .NET
       - Azure
     cover: /projects/evolution-energie.svg
-    title: SSO & API Gateway
+    title:
+      en: Flexinergy
+      fr: Flexinergy
+      lb: Flexinergy
     description:
       en: Implemented SSO authentication to replace WS-Federation, plus an API Gateway and reverse proxy to route requests.
       fr: Implémentation de l'authentification SSO en remplacement de WS-Federation, plus une API Gateway et un reverse proxy pour le routage des requêtes.
