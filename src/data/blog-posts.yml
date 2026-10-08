@@ -1,3 +1,19 @@
+- slug: claude-code-for-experts
+  date: 2026-10-08
+  tags:
+    - claude-code
+    - ai
+    - agentic
+    - sdlc
+    - automation
+  title:
+    en: "Claude Code across the software development life cycle"
+    fr: "Claude Code tout au long du cycle de vie logiciel"
+    lb: "Claude Code iwwer de ganze Software Life Cycle"
+  description:
+    en: "A phase-by-phase guide to pairing with Claude Code across the SDLC: requirements, planning, design, development, testing, CI/CD, and operations — with real prompts and diagrams."
+    fr: "Un guide phase par phase pour travailler avec Claude Code tout au long du SDLC : exigences, planification, conception, développement, tests, CI/CD et exploitation — avec des prompts et diagrammes concrets."
+    lb: "E phase-ba-Phase-Guide fir mam Claude Code iwwer de ganzen SDLC ze schaffen: Ufuerderungen, Planung, Design, Entwécklung, Tester, CI/CD a Betrib — mat richtege Prompts an Diagrammer."
 - slug: angular-for-experts
   date: 2026-09-02
   tags:

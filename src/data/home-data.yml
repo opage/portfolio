@@ -4,16 +4,19 @@ roles:
     - Java / .NET
     - Angular
     - Azure
+    - AI‑augmented Developer
   fr:
     - Développeur Full-stack
     - Java / .NET
     - Angular
     - Azure
+    - Développeur augmenté par l'IA
   lb:
     - Full-stack Entwéckler
     - Java / .NET
     - Angular
     - Azure
+    - KI‑ergänzte Entwéckler
 intro:
   heading:
     en: LET ME **INTRODUCE** MYSELF
