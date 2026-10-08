@@ -25,6 +25,7 @@ const keys = [
   'about-line-2',
   'about-line-3',
   'about-line-4',
+  'about-line-5',
   'about-skillset',
   'about-soft-skills',
   'about-tools',
@@ -40,7 +41,7 @@ const softSkills = [1, 2, 3, 4, 5].map((n) => ({
   desc: c[`soft-skill-${n}-desc`],
 }))
 
-const aboutLines = [1, 2, 3, 4].map((n) => c[`about-line-${n}`])
+const aboutLines = [1, 2, 3, 4, 5].map((n) => c[`about-line-${n}`])
 ---
 
 <Layout title={dict.nav.about} lang={lang} currentPath={Astro.url.pathname}>
